@@ -1,5 +1,11 @@
 module.exports = {
+  siteMetadata: {
+    title: "nagamocha",
+    description: "blog...",
+    author: "bnm",
+  },
   plugins: [
+    `gatsby-transformer-remark`,
     {
       resolve: "gatsby-plugin-mdx",
       options: {
