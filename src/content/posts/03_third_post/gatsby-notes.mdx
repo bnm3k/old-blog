@@ -20,7 +20,7 @@ import {Link} from "gasby"
 ## Adding CSS with Emotion
 
 To begin with install a couple of dependencies:
-`bash npm i @emotion/core @emotion/styled gatsby-plugin-emotion`
+`npm i @emotion/core @emotion/styled gatsby-plugin-emotion`
 @emotion/core gives access to global styles and the css prop
 @emotion/style provides an interface to styled components
 gatsby-plugin-emotion, allows gatsby to build with emotion properly
@@ -122,7 +122,7 @@ export default useSiteMetadata
 MDX enables us to use react components in markdown  
 To start, install a couple of dependencies
 
-```
+```bash
 npm i gatsby-plugin-mdx @mdx-js/mdx @mdx-js/react
 ```
 
@@ -159,7 +159,7 @@ markdown goes here
 
 To use markdown inside of react components, remember to leave newlines for it to be parsed correctly!
 
-```mdx
+```md
 <div style={{ backgroud: 'teal' }}>
 
 ## Some Title
@@ -173,7 +173,7 @@ Create a folder called content then inside create a posts folder:
 Have a numbering system for naming your files  
 The mdx files can have a front-matter:
 
-```mdx
+```md
 ---
 title: Hello World!
 slug: hello-world

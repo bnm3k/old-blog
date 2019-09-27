@@ -5,22 +5,24 @@ module.exports = {
     author: "bnm",
   },
   plugins: [
+    "gatsby-plugin-emotion",
     {
       resolve: "gatsby-plugin-mdx",
       options: {
         defaultLayouts: {
           default: require.resolve("./src/components/layout.js"),
         },
-        plugins: [
+        extensions: [".mdx", ".md"],
+        gatsbyRemarkPlugins: [
           "gatsby-remark-smartypants",
           "gatsby-plugin-catch-links",
           {
             resolve: `gatsby-remark-prismjs`,
             options: {
               classPrefix: "language-",
-              inlineCodeMarker: null,
+              inlineCodeMarker: "›",
               showLineNumbers: true,
-              aliases: {},
+              aliases: { md: "markup", mdx: "markup" },
             },
           },
         ],
