@@ -2,13 +2,17 @@ import React from "react"
 import { graphql, Link } from "gatsby"
 import { MDXRenderer } from "gatsby-plugin-mdx"
 import Layout from "../components/layout"
-import useSiteMetadata from "../hooks/useSiteMetadata"
 
 export const query = graphql`
   query($slug: String!) {
     mdx(frontmatter: { slug: { eq: $slug } }) {
+      timeToRead
+      wordCount {
+        words
+      }
       frontmatter {
         title
+        tags
       }
       body
     }
@@ -37,15 +41,38 @@ const PostFooter = ({ next, prev }) => (
     )}
   </>
 )
+const Tags = ({ tags }) => (
+  <div>
+    {tags.length > 1 ? "tags: " : "tag: "}
+    {tags.map((tag, i) => (
+      <span key={i}>
+        <Link to={`/tag/${tag}`}>{tag}</Link>
+        {i === tags.length - 1 ? null : " | "}
+      </span>
+    ))}
+  </div>
+)
+
+const MetaInfo = ({ timeToRead: t, words: w }) => (
+  <div>
+    <span>{`${t} min read: ${w} words`}</span>
+  </div>
+)
 
 const PostTemplate = ({ data: { mdx: post }, pageContext }) => {
   const { prev, next } = pageContext
-  const { author } = useSiteMetadata()
+  const {
+    timeToRead,
+    body,
+    frontmatter: { title, tags },
+    wordCount: { words },
+  } = post
   return (
     <Layout>
-      <h1>{post.frontmatter.title}</h1>
-      <p>By {author}</p>
-      <MDXRenderer>{post.body}</MDXRenderer>
+      <h1>{title}</h1>
+      {tags && <Tags tags={tags} />}
+      <MetaInfo timeToRead={timeToRead} words={words} />
+      <MDXRenderer>{body}</MDXRenderer>
       <PostFooter next={next} prev={prev} />
     </Layout>
   )

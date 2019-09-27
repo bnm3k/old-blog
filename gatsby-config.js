@@ -5,6 +5,7 @@ module.exports = {
     author: "bnm",
   },
   plugins: [
+    "gatsby-plugin-sharp",
     "gatsby-plugin-emotion",
     {
       resolve: "gatsby-plugin-mdx",
@@ -15,7 +16,22 @@ module.exports = {
         extensions: [".mdx", ".md"],
         gatsbyRemarkPlugins: [
           "gatsby-remark-smartypants",
-          "gatsby-plugin-catch-links",
+          "gatsby-remark-copy-linked-files",
+          "gatsby-remark-responsive-iframe",
+          {
+            resolve: "gatsby-remark-external-links",
+            options: {
+              target: "_blank",
+              rel: "nofollow noopener noreferrer",
+            },
+          },
+          {
+            resolve: `gatsby-remark-images`,
+            options: {
+              maxWidth: 590,
+              linkImagesToOriginal: false,
+            },
+          },
           {
             resolve: `gatsby-remark-prismjs`,
             options: {
@@ -25,6 +41,10 @@ module.exports = {
               aliases: { md: "markup", mdx: "markup" },
             },
           },
+        ],
+        plugins: [
+          { resolve: "gatsby-remark-images" },
+          "gatsby-plugin-catch-links",
         ],
       },
     },
