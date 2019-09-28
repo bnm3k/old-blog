@@ -3,6 +3,7 @@ import Header from "./Header"
 import Helmet from "react-helmet"
 import useSiteMetadata from "../hooks/useSiteMetadata"
 import { Global, css } from "@emotion/core"
+import colors from "../style/colors"
 
 const Layout = ({ children }) => {
   const { title, description } = useSiteMetadata()
@@ -23,10 +24,11 @@ const Layout = ({ children }) => {
 
           html,
           body {
-            background-color: #dfdbe5;
+            background-color: ${colors.backgroundColor};
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%239C92AC' fill-opacity='0.4' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+
             margin: 0;
-            color: black;
+            color: ${colors.textPrimary};
             font-family: "Merriweather", serif, -apple-system,
               BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
               "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -36,6 +38,8 @@ const Layout = ({ children }) => {
             /* remove margin for the main div that Gatsby mounts into */
             > div {
               margin-top: 0;
+              margin-left: 15px;
+              margin-right: 5px;
             }
           }
 
@@ -45,7 +49,7 @@ const Layout = ({ children }) => {
           h4,
           h5,
           h6 {
-            color: #403f3f;
+            color: ${colors.textHeaders};
             line-height: 1.1;
             font-family: Montserrat, "Arial Black", Gadget, sans-serif;
             font-size: 20px;
@@ -64,20 +68,20 @@ const Layout = ({ children }) => {
           }
 
           strong {
-            color: #222;
+            color: ${colors.emphasis};
           }
 
           .title-header {
             padding: 0 0 4px;
-            border-bottom: 5px dashed #caa4de;
+            border-bottom: 5px dashed ${colors.primary};
             display: inline-block;
           }
           .title-header:hover {
-            color: #a17ebf;
+            color: ${colors.textLink};
           }
 
           a {
-            color: #a17ebf;
+            color: ${colors.textLink};
           }
 
           li {

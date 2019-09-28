@@ -10,6 +10,7 @@ const EmbeddedYoutubeVideo = ({ src, title = "" }) => {
       height="315"
       src={src}
       frameborder="0"
+      color="green"
       allowfullscreen
     ></iframe>
   )

@@ -4,9 +4,15 @@ const getPosts = async (graphql, reporter) => {
     {
       allMdx(sort: { order: DESC, fields: frontmatter___date }) {
         nodes {
+          timeToRead
+          wordCount {
+            words
+          }
           frontmatter {
-            slug
             title
+            slug
+            excerpt
+            date
             tags
           }
         }
@@ -23,7 +29,7 @@ const createBlogPostPages = async (createPage, posts) => {
   posts.forEach((post, i) => {
     createPage({
       path: `/blog/${post.frontmatter.slug}`,
-      component: require.resolve("./src/templates/post.js"),
+      component: require.resolve("./src/templates/post.jsx"),
       context: {
         slug: post.frontmatter.slug,
         next: i === 0 ? null : posts[i - 1],
@@ -50,7 +56,7 @@ const createTagPages = (createPage, posts) => {
   //create page displaying all tags
   createPage({
     path: "/tags",
-    component: require.resolve("./src/templates/tags.js"),
+    component: require.resolve("./src/templates/tags.jsx"),
     context: {
       tags: tags.sort(),
     },
@@ -61,7 +67,7 @@ const createTagPages = (createPage, posts) => {
     const posts = postsByTag[tag]
     createPage({
       path: `/tag/${tag}`,
-      component: require.resolve("./src/templates/tag.js"),
+      component: require.resolve("./src/templates/tag.jsx"),
       context: {
         posts,
         tag,
@@ -70,8 +76,17 @@ const createTagPages = (createPage, posts) => {
   })
 }
 
+const createHomePage = (createPage, posts) => {
+  createPage({
+    path: `/`,
+    component: require.resolve("./src/templates/homepage.jsx"),
+    context: { posts },
+  })
+}
+
 exports.createPages = async ({ actions, graphql, reporter }) => {
   const posts = await getPosts(graphql, reporter)
+  createHomePage(actions.createPage, posts)
   createBlogPostPages(actions.createPage, posts)
   createTagPages(actions.createPage, posts)
 }
