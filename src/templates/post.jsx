@@ -18,12 +18,16 @@ const StyledPrev = styled.div`
 `
 
 const StyledPageSuggestion = styled.div`
-  display: inline block;
+  display: block;
+  height: 40px;
 `
 
 const HomePageSection = styled.div`
   background-color: ${colors.secondary};
+  color: ${colors.textPrimary2};
   border-radius: 10px;
+  height: 30px;
+  line-height: 30px;
   display: block;
   clear: left;
   text-align: center;

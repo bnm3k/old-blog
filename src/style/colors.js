@@ -2,7 +2,7 @@ const colors = {
   primary: "#caa4de",
   secondary: "#ffc0cb",
   textHeaders: "#403f3f",
-  textLink: "#a17ebf",
+  textLink: "#e066ff",
   textPrimary: "black",
   textPrimary2: "#403f3f",
   textSecondary: "#808080",
