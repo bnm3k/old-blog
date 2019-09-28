@@ -1,7 +1,7 @@
 import React from "react"
 import { graphql, Link } from "gatsby"
 import { MDXRenderer } from "gatsby-plugin-mdx"
-import Layout from "../components/layout"
+import Layout from "../components/Layout"
 
 export const query = graphql`
   query($slug: String!) {
@@ -47,7 +47,7 @@ const Tags = ({ tags }) => (
     {tags.map((tag, i) => (
       <span key={i}>
         <Link to={`/tag/${tag}`}>{tag}</Link>
-        {i === tags.length - 1 ? null : " | "}
+        {i === tags.length - 1 ? null : " , "}
       </span>
     ))}
   </div>
@@ -60,7 +60,7 @@ const MetaInfo = ({ timeToRead: t, words: w }) => (
 )
 
 const PostTemplate = ({ data: { mdx: post }, pageContext }) => {
-  const { prev, next } = pageContext
+  const { prev, next, slug } = pageContext
   const {
     timeToRead,
     body,
@@ -69,7 +69,9 @@ const PostTemplate = ({ data: { mdx: post }, pageContext }) => {
   } = post
   return (
     <Layout>
-      <h1>{title}</h1>
+      <Link to={`/blog/${slug}`}>
+        <h1 class="title-header">{title}</h1>
+      </Link>
       {tags && <Tags tags={tags} />}
       <MetaInfo timeToRead={timeToRead} words={words} />
       <MDXRenderer>{body}</MDXRenderer>

@@ -1,8 +1,8 @@
 const getPosts = async (graphql, reporter) => {
   let posts = null
   const result = await graphql(`
-    query {
-      allMdx {
+    {
+      allMdx(sort: { order: DESC, fields: frontmatter___date }) {
         nodes {
           frontmatter {
             slug

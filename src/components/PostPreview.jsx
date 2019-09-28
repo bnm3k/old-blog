@@ -8,7 +8,7 @@ const PostPreview = ({ post }) => {
   return (
     <article>
       <Link to={link}>
-        <h2>{title}</h2>
+        <h1 class="title-header">{title}</h1>
       </Link>
       <p>Excerpt: {excerpt}</p>
       <p>Date: {date}</p>
