@@ -32,8 +32,31 @@ const Layout = ({ children }) => {
             font-family: "Merriweather", serif, -apple-system,
               BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
               "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-            font-size: 16px;
-            line-height: 1.4;
+            font-size: 18px;
+            letter-spacing: 0.03em;
+            line-height: 2.3;
+            /*credits for blockquote style: https://css-tricks.com/snippets/css/simple-and-nice-blockquote-styling/*/
+            blockquote {
+              border-radius: 10px;
+              color: ${colors.textPrimary};
+              background: ${colors.textSecondary};
+              border-left: 10px solid ${colors.primary};
+              margin: 1.5em 10px;
+              padding: 0.5em 10px;
+            }
+
+            blockquote:before {
+              color: ${colors.primary};
+              content: open-quote;
+              font-size: 4em;
+              line-height: 0.1em;
+              margin-right: 0.25em;
+              vertical-align: -0.4em;
+            }
+
+            blockquote p {
+              display: inline;
+            }
 
             /* remove margin for the main div that Gatsby mounts into */
             > div {

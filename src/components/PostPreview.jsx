@@ -7,6 +7,12 @@ const StyledMetaInfo = styled.div`
   font-size: 0.6em;
   margin-top: 5px;
   color: ${colors.textSecondary};
+  a {
+    color: ${colors.textSecondary};
+  }
+  a:hover {
+    color: ${colors.textLink};
+  }
 `
 
 const StyledExcerpt = styled.div`
@@ -29,7 +35,7 @@ const PostPreview = ({ post }) => {
     wordCount: { words: w },
     frontmatter,
   } = post
-  const { title, slug, excerpt, date, tags } = frontmatter
+  const { title, slug, excerpt, tags } = frontmatter
   const link = `/blog/${slug}`
   return (
     <>
@@ -38,9 +44,9 @@ const PostPreview = ({ post }) => {
           <h1 class="title-header">{title}</h1>
         </Link>
         <StyledMetaInfo>
-          <span> Posted on: {date} | </span>
-          <span> Word Count: {w} | </span>
-          <span> Time to Read: {t} min | </span>
+          {/* <span> Posted on: {date} | </span> */}
+          <span> {w} words 📖 | </span>
+          <span> {t} min read ⏳ | </span>
           <span>
             {" "}
             Tagged in:{" "}

@@ -6,6 +6,13 @@ import styled from "@emotion/styled"
 import Emoji from "../components/Emoji"
 import colors from "../style/colors"
 
+const StyledHeader = styled.h1`
+  color: ${colors.textLink};
+  &:hover {
+    color: ${colors.textHeaders};
+  }
+`
+
 const StyledNext = styled.div`
   float: right;
   margin: 0;
@@ -66,7 +73,7 @@ const PostFooter = ({ next, prev }) => (
 )
 const Tags = ({ tags }) => (
   <div>
-    {tags.length > 1 ? "tags: " : "tag: "}
+    {tags.length > 0 ? (tags.length > 1 ? "tags: " : "tag: ") : null}
     {tags.map((tag, i) => (
       <span key={i}>
         <Link to={`/tag/${tag}`}>{tag}</Link>
@@ -98,7 +105,7 @@ const PostTemplate = ({ data: { mdx: post }, pageContext }) => {
   return (
     <Layout>
       <Link to={`/blog/${slug}`}>
-        <h1 class="title-header">{title}</h1>
+        <StyledHeader class="title-header">{title}</StyledHeader>
       </Link>
       <MetaInfo timeToRead={timeToRead} words={words} />
       {tags && <Tags tags={tags} />}
