@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "license": "MIT",
   "scripts": {
+    "analyze": "ANALYZE_BUNDLE_SIZE=true gatsby build",
     "build": "gatsby build",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
@@ -23,6 +24,7 @@
     "gatsby-plugin-mdx": "^1.0.44",
     "gatsby-plugin-offline": "^3.0.11",
     "gatsby-plugin-sharp": "^2.2.27",
+    "gatsby-plugin-webpack-bundle-analyzer": "^1.0.5",
     "gatsby-remark-copy-linked-files": "^2.1.23",
     "gatsby-remark-external-links": "^0.0.4",
     "gatsby-remark-images": "^3.1.25",
