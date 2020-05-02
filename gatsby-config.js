@@ -1,69 +1,72 @@
+require(`dotenv`).config({
+  path: `.env`,
+});
+
 module.exports = {
   siteMetadata: {
-    title: "nagamocha",
-    description: "blog...",
-    author: "bnm",
+    siteTitle: `Nagamocha`,
+    siteTitleAlt: `Nagamocha`,
+    siteHeadline: `...`,
+    siteUrl: `https://www.nagamocha.dev`,
+    siteDescription: `writing as I learn along. Learning as I write along`,
+    siteLanguage: `en`,
+    siteImage: `/icon.png`,
+    author: `@nagamocha3000`,
   },
   plugins: [
-    "gatsby-plugin-sharp",
-    "gatsby-plugin-emotion",
     {
-      resolve: "gatsby-plugin-mdx",
+      resolve: `@lekoarts/gatsby-theme-minimal-blog`,
+      // See the theme's README for all available options
       options: {
-        defaultLayouts: {
-          default: require.resolve("./src/components/Layout.jsx"),
-        },
-        extensions: [".mdx", ".md"],
-        gatsbyRemarkPlugins: [
-          "gatsby-remark-smartypants",
-          "gatsby-remark-copy-linked-files",
-          "gatsby-remark-responsive-iframe",
+        formatString: "YYYY",
+        showLineNumbers: false,
+        navigation: [
           {
-            resolve: "gatsby-remark-external-links",
-            options: {
-              target: "_blank",
-              rel: "nofollow noopener noreferrer",
-            },
+            title: `Blog`,
+            slug: `/blog`,
           },
           {
-            resolve: `gatsby-remark-images`,
-            options: {
-              maxWidth: 590,
-              linkImagesToOriginal: false,
-            },
+            title: `About`,
+            slug: `/about`,
           },
           {
-            resolve: `gatsby-remark-prismjs`,
-            options: {
-              classPrefix: "language-",
-              inlineCodeMarker: "›",
-              showLineNumbers: true,
-              aliases: { md: "markup", mdx: "markup" },
-            },
+            title: `Misc`,
+            slug: `/misc`,
           },
-        ],
-        plugins: [
-          { resolve: "gatsby-remark-images" },
-          "gatsby-plugin-catch-links",
         ],
       },
     },
     {
-      resolve: "gatsby-source-filesystem",
+      resolve: `gatsby-plugin-google-analytics`,
       options: {
-        name: "posts",
-        path: `${__dirname}/src/content/posts`,
+        trackingId: process.env.GOOGLE_ANALYTICS_ID,
+      },
+    },
+    `gatsby-plugin-sitemap`,
+    {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        name: `Nagamocha blog`,
+        short_name: `Nagamocha`,
+        description: `Nagamocha`,
+        start_url: `/`,
+        background_color: `#fff`,
+        theme_color: `#6B46C1`,
+        display: `standalone`,
+        icon: `static/icon.png`,
+      },
+    },
+    {
+      resolve: `gatsby-plugin-google-fonts`,
+      options: {
+        fonts: [
+          `source sans pro\:300,400,400i,700`,
+          `source serif pro\:100,400,400i,700`,
+        ],
+        display: "swap",
       },
     },
     `gatsby-plugin-offline`,
-    {
-      resolve: "gatsby-plugin-webpack-bundle-analyzer",
-      options: {
-        production: true,
-        disable: !process.env.ANALYZE_BUNDLE_SIZE,
-        generateStatsFile: true,
-        analyzerMode: "static",
-      },
-    },
+    `gatsby-plugin-netlify`,
   ],
-}
+};

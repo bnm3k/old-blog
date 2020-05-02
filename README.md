@@ -1,3 +1,6 @@
-## NAGAMOCHA BLOG
+# NAGAMOCHA_DEV BLOG
 
-Currently under constructrion
+# CREDITS
+
+1. Gatsby
+2. LekoArts for the minimal blog Gatsby starter: [link](https://github.com/LekoArts/gatsby-themes/tree/master/themes/gatsby-theme-minimal-blog)
