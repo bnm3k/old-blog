@@ -20,6 +20,7 @@ module.exports = {
       options: {
         formatString: "YYYY",
         showLineNumbers: false,
+        feed: false,
         navigation: [
           {
             title: `Blog`,
