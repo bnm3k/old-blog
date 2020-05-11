@@ -1,7 +1,7 @@
 ---
 title: "Back To Basics: SQL Joins, P1"
 slug: sql-joins-p1
-date: 2019-12-3
+date: 2019-12-04
 description: "sql joins as reduction/folds over tables à la functional programming"
 tags: ["sql", "functional programming"]
 ---
