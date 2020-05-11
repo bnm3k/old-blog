@@ -1,7 +1,7 @@
 ---
 title: "Back To Basics: SQL Joins, P2"
 slug: sql-joins-p2
-date: 2019-12-3
+date: 2019-12-4
 description: "Writing SQL joins without using joins at all. Database history, Schemas, Constraints, Cross-products and everything in between"
 tags: ["sql", "databases"]
 ---
