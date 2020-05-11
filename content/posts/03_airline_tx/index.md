@@ -1,8 +1,8 @@
 ---
-title: "Handling Airline Seat Booking: PostgreSQL Transactions & Isolation levels"
+title: "Handling Airline Seat Booking Correctly: PostgreSQL Transactions & Isolation levels"
 slug: airline-tx-postgres-isolation-levels
 date: 2019-11-20
-description: "Using the right isolation level to nasty avoid billing errors for booking systems"
+description: "Using the right isolation level to avoid nasty billing errors when building database-driven booking systems"
 tags: ["postgres", "transactions", "sql"]
 ---
 
