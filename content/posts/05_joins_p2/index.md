@@ -134,6 +134,8 @@ One thing to note is that unlike the hierarchical and network model, the relatio
 
 Back to SQL and relational databases. When we declare a column as a foreign key what we are in fact doing is simply adding a constraint at the schema level. Zero 'links' are created. Instead the database ensures that for every non-null value we add at that column, a corresponding value that it is equal to it exists as a primary key in the referenced table. This is referred to as **Referential Integrity**. For the sake of being pedantic, referential integrity is more general, it does not require the referenced column to be a primary key- the exact term we're looking for is **foreign-key constraint**.
 
+
+
 Given that we've already created the table _task_, we can tack on foreign-key constraint to our table as follows:
 
 ```sql
@@ -226,6 +228,8 @@ from task t join venue v using(venue_id);
 
 
 And compared to cross-products plus row-level filters, using joins (if you weren't already doing so) is the best way to approach such kind of queries not only because it's much more readable (it seperates row-level filters from join predicates) but also because it'll probably run faster as most query processors optimize for it given it is the common case.
+
+
 
 ## Outer joins without the 'join' keyword
 
