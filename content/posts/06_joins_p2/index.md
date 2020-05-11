@@ -47,7 +47,7 @@ values
     (4, 'Cook food');
 ```
 
-Now a typical query is for generating the list of all tasks that potential volunteers might want to sign up for. Being a synthetic key, the *venue id* is meaningless to humans so we'll have to retrieve the related location name. We can't use joins yet (until we see how they fit in); we'll have to use the cross-product. And if you're unfamilar with what cross-products are exactly, we'll get to it soon enough. To get the cross product of two or more tables, we simply list the tables in the *from* clause separating each name with a comma: we can think of the comma as the cross-product operator:
+Now a typical query is for generating the list of all tasks that potential volunteers might want to sign up for. Being a synthetic key, the _venue id_ is meaningless to humans so we'll have to retrieve the related location name. We can't use joins yet (until we see how they fit in); we'll have to use the cross-product. And if you're unfamilar with what cross-products are exactly, we'll get to it soon enough. To get the cross product of two or more tables, we simply list the tables in the _from_ clause separating each name with a comma: we can think of the comma as the cross-product operator:
 
 ```sql
 select *
@@ -132,7 +132,7 @@ On deletion we add one of the following keywords to tell the database what cours
 
 - `on delete restrict`: we can outright prevent anyone from deleting the row with the primary key if there's any foreign key referencing it.
   If we don't specify any action, postgres defaults to _on delete no action_. The Postgres documentation explains that:
-  
+
   > RESTRICT prevents deletion of a referenced row. NO ACTION means that if any referencing rows still exist when the constraint is checked, an error is raised; this is the default behavior if you do not specify anything. (The essential difference between these two choices is that NO ACTION allows the check to be deferred until later in the transaction, whereas RESTRICT does not.)
 
 On Updates, we can also add one of the following keywords:

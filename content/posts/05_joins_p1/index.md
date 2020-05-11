@@ -3,7 +3,7 @@ title: "Back To Basics: SQL Joins, P1"
 slug: sql-joins-p1
 date: 2019-12-04
 description: "sql joins as reduction/folds over tables à la functional programming"
-tags: ["sql", "functional programming"]
+tags: ["sql", "databases", "functional programming"]
 ---
 
 Mental models help us navigate complex ideas. However, forming one own's mental models can be a tricky affair. On one hand, by putting the effort to come up with menetal a model by ourselves, we gain a deeper understanding of the subject at hand. We also become better and more efficient at reasoning and problem-solving. However, on the other hand, a deficient or even an entirely wrong mental model can derail arriving at a far deeper understanding and even result in huge errors and blindspots later on, despite such mental models serving us well in the beginning. This was my case when I encountered _joins_ at first when I was learning SQL.
