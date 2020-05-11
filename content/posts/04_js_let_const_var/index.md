@@ -239,4 +239,4 @@ That's a bit of a digression. Back to javascript: what does it even mean for a f
 
 
 
-Anyway, that's it for now. If the whole post seems raw and jumbled up that's because it actually is. I'm learning ()and unlearning and relearning) javascript and hopefelly, as I dig deeper into javascript, I'll shed off the errenous assumptions I brought in with me from other languages and embrace js fully with all its quirks and idiosyncrasies. 
+Anyway, that's it for now. If the whole post seems raw and jumbled up that's because it actually is. I'm learning (and unlearning and relearning) javascript and hopefully, as I dig deeper into javascript, I'll shed off the errenous assumptions I brought in with me from other languages and embrace js fully with all its quirks and idiosyncrasies. 
