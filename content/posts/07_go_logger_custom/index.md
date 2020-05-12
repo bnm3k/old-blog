@@ -2,10 +2,9 @@
 title: "Golang Custom Loggers: using Postgres and/or Leveldb"
 slug: go-custom-logger-pg-leveldb
 date: 2019-12-20
-description: "Coupling logging to the desired destination (in this case postgres and leveldb) within the application itself isn't by any means a good idea. Still, given the flexibility Go's interface provide, why not try ¯\_(ツ)_/¯"
+description: "Coupling logging to the desired destination (in this case postgres and leveldb) within the application itself isn't by any means a good idea. Still, given the flexibility Go's interface provide, why not try ¯\\_(ツ)_/¯"
 tags: ["golang", "postgres", "leveldb", "logging"]
 ---
-# Log-storage: using postgres & leveldb in Golang (for fun)
 
 Golang's standard library provides the handy [log](https://golang.org/pkg/log/) package which suffices for most simple logging cases. Usually, the logs are output to the standard streams (stdout or stderr). From there, they can be redirected as needed when launching the app via terminal. Alternatively, the log outputs can also be written directly to a file.
 
