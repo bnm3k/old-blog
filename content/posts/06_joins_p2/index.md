@@ -2,15 +2,23 @@
 title: "Back To Basics: SQL Joins, P2"
 slug: sql-joins-p2
 date: 2019-12-05
-description: "Writing SQL joins without using joins at all. Database history, Schemas, Constraints, Cross-products and everything in between"
+description: "Writing SQL joins without using joins at all. A quick history of Database Models, Schemas, Constraints, Cross-products and everything in between"
 tags: ["sql", "databases"]
 ---
 
-Now, I've written [previously](https://www.nagamocha.dev/sql-joins-p1/) on conceptualizing '_sql joins as reduce_'. But to fully comprehend or visualize joins, it's best to not even think about them, for lack of more formal phrasing, as first-class citizens in sql. This is because any query involving joins can always be rewritten without them. - joins are, loosely speaking, nothing more than syntactic sugar. This is because SQL already provides a much more bare-bones procedure for combining rows from multiple tables, the **cross-product**. Therefore, to build a full understanding of joins, we have to go back to the basics and scale up from there.
+Now, I've written [previously](https://www.nagamocha.dev/sql-joins-p1/) on how, when learning SQL, I had trouble understanding joins conceptually and even at a much more technical level. Usually, joins are presented to learners as is since, after all, SQL is a declarative language and the user ought to focus on framing the correct question or rather query, and let the database engine figure out *how* to answer it correctly. It's tempting to try to figure out the 'how', worse so as a beginner, and at first I wrongly assumed that joins in sql follow a sort of pointer or link when a column in a table is declared as a foreign key to primary key in another table. 
 
-Let's use some example to demonstrate cross-products and build back to a clearer understanding of joins. I'll be using postgres 9.6 and psql in case there's any incompatibilities.
 
-Suppose we are building a database for a charity group which wants to keep track of all the volunteers who've joined and all the activities they undertake. We'll keep things simple and introduce other aspects as we go on. Activities within the charity can be broken down into what needs to be done and where it should be done. Multiple activities can take place in the same location so we'll have to separate the two. The 'what' is captured by the **task** table and the 'where' is captured by the **venue** table. Again there's probably more attributes that we need to capture but this will do for now:
+
+I quickly discarded this assumption when I encountered queries that didn't fit to it. In the end, I settled on 'joins as a reduce/fold over tables' as detailed in the post. However, I was still left with the lingering thought that joins have something to do with foreign keys since all the queries I had come across at that point always involved both. As such, I had to dig deeper. This article therefore is a deep-dive for SQL beginners (and even those at the intermediate-level) on how joins and foreign keys fit into SQL. Spoiler alert, joins are not interlinked in any way with foreign keys; joins are basically row-level filters and in fact, any query written using joins can be rewritten without them (with a little help from **cross products**). On the other hand, foreign keys (as an abstraction) are nothing more than constraints that ensure the value in a given column is a primary key in some other table. 
+
+
+
+I'll be using an example database in Postgres to demonstrate cross-products and build back to a clearer understanding of joins.
+
+
+
+Okay, let's go. Suppose we are building a database for a charity group which wants to keep track of all the volunteers who've joined and all the activities they undertake. We'll keep things simple and introduce other aspects as we go on. Activities within the charity can be broken down into what needs to be done and where it should be done. Multiple activities can take place in the same location so we'll have to separate the two. The 'what' is captured by the **task** table and the 'where' is captured by the **venue** table. Again there's probably more attributes that we need to capture but this will do for now:
 
 ```sql
 create table if not exists venue(
@@ -47,7 +55,9 @@ values
     (4, 'Cook food');
 ```
 
-Now a typical query is for generating the list of all tasks that potential volunteers might want to sign up for. Being a synthetic key, the _venue id_ is meaningless to humans so we'll have to retrieve the related location name. We can't use joins yet (until we see how they fit in); we'll have to use the cross-product. And if you're unfamilar with what cross-products are exactly, we'll get to it soon enough. To get the cross product of two or more tables, we simply list the tables in the _from_ clause separating each name with a comma: we can think of the comma as the cross-product operator:
+Now a typical query is for generating the list of all tasks that potential volunteers might want to sign up for. Being a synthetic key, the _venue id_ is meaningless to humans so we'll have to retrieve the related location name. We can't use joins yet (until we see how they fit in); we'll have to use the cross-product. And if you're unfamilar with what cross-products are exactly, we'll get to it soon enough. 
+
+To get the cross product of two or more tables, we simply list the tables in the _from_ clause separating each name with a comma: we can think of the comma as the cross-product operator:
 
 ```sql
 select *
@@ -82,7 +92,9 @@ It also illustrates a couple of things which were not obvious (at least to me) w
 
 One, given how we are using the **task.venue_id** in the _where_ clause to 'simulate' the join, a foreign key column is just that, a column like any other column: when a column stores foreign keys it does not create any sort of underlying links and pointers between the two tables, a conceptualization mistake I made at first when trying to understand joins and foreign relations.
 
-In fact, as I was trying to find out whether such 'links' are created in SQL, I instead learned the opposite: unlike previous database models, the relational model (which SQL databases implement) deliberately eschews any form of explicit links between collections of data i.e. the tables. Let's pause a bit and take a trip down memory lane. For brevity's sake, let's skip the pre-cambrian era where there were no databases and head straight to triassic period when the first databases were emerging. One key aspect that drove database development and evolution was the question: how should the data be represented? Moreover, since data in 'real life' is usually interlinked, how should such relationships be outlined. Given the interests of both businesses and academia, various data models were proposed in the 70s and 80s to address this key issue.
+In fact, as I was trying to find out whether such 'links' are created in SQL, I instead learned the opposite: unlike previous database models, the relational model (which SQL databases implement) deliberately eschews any form of explicit links between collections of data i.e. the tables...
+
+Let's pause a bit and take a trip down memory lane. For brevity's sake, let's skip the pre-cambrian era where there were no databases and head straight to triassic period when the first databases were emerging. One key aspect that drove database development and evolution was the question: *how should the data be represented?* Moreover, since data in 'real life' is usually interlinked, how should such relationships be outlined. Given the interests of both businesses and academia, various data models were proposed in the 70s and 80s to address this key issue.
 
 One of the first models proposed was the **Hierarchical Model**.
 From Wikipedia, we have the following description of this model:
@@ -94,9 +106,9 @@ In our charity organization example, using the hierarchical model would entail h
 
 Next, the **Network Model** was proposed. In jest, the thinking probably went like this: what if we took the hierarchical structure, and simply allowed for children nodes to have multiple parents - voila! many-to-many relationships. I mean, it's a straight forward solution, one that I could see myself blurting out. And just like the Hierarchical mode, this too had explicit links between the records that you'd use to traverse the data. However, by solving this one specific problem (the many-to-many relationships), the Network Model opened up a whole can of worms. For one, how exactly do you query such a database in a way that's straightforward and maintenable; for all its shortcomings, at least with the hierachical model, you had a definite path to the desired record. There were other additional factors that held back application and database developers from adopting the network model and for a while the hierarchical model remained dominant.
 
-That was until the **relational model** was introduced. It's such a simple and straightforward model, almost too simple: entities are represented as rows in a table, and each column of the table represents an attribute of the given entity, basically spreadsheets (air-quotes) on steroids. There are **no** links which the application developer has to explicitly traverse so as to get the data: instead, the developer writes a query that lays out the 'shape' of the data that the developer wants back, (the shape itself conforming to a table), and the query processor in the databases figures out how to efficiently traverse its internal data-structures in order to 'answer' this query correctly. In other words, all the developer has to deal with is the abstraction of a table/relation and the accompanying guarantees & constraints.
+That was until the **relational model** was introduced. It's such a simple and straightforward model, almost too simple: entities are represented as rows in a table, and each column of the table represents an attribute of the given entity, basically spreadsheets (air-quotes) on steroids. There are **no** links which the application developer has to explicitly traverse so as to get the data: instead, the developer writes a query that lays out the 'shape' of the data that the developer wants back, (the shape itself conforming to a table), and the query processor in the database figures out how to efficiently traverse its internal data-structures in order to 'answer' this query correctly. In other words, all the developer has to deal with is the abstraction of a table/relation and the accompanying guarantees & constraints.
 
-One thing to note is that unlike the hierarchical and network model, the relational model doesn't really specify explicit links: again, all you have to work with are disparate tables. Instead, the relational model provides something way more powerful, a schema that it'll enforce come rain or shine. At first, it's not apparent how a schema solves the problem of interlinks and relationships but we'll see how. As per the relational model, the column of each row has a domain that's specified in the schema. Before any insert or modification of a value, the database checks that the value belongs in its respective domain. If not, the db rejects the value and 'throws' an error. This is what's referred to as 'schema-on-write'. It is in contrast to some modern 'no-sql' databases that don't enforce any schema at the db level - hence developers have to check if the data conforms to some schema at the application level. This can be done before sending the data into the database for insertion/updating (e.g. if you've used mongoose before for mongodb or joi for couchdb). It's referred to as 'application-level schema'. Alternatively, for no-sql databases that don't support schemas, the application has to validate the data after reading it from the database i.e. 'schema-on-read'.
+One thing to note (again) is that unlike the hierarchical and network model, the relational model doesn't really specify explicit links: again, all you have to work with are disparate tables. Instead, the relational model provides something way more powerful, a *schema*. The database will enforce this schema come rain or shine. Hence the 'C' in ACID - Consistency. At first, it's not apparent how a schema solves the problem of interlinks and relationships but we'll see how. As per the relational model, the column of each row has a domain that's specified in the schema. Before any insert or modification of a value, the database checks that the value belongs in its respective domain. If not, the db rejects the value and 'throws' an error. This is what's referred to as 'schema-on-write'. It is in contrast to some modern 'no-sql' databases that don't enforce any schema at the db level - hence developers have to check if the data conforms to some schema at the application level. This can be done before sending the data into the database for insertion/updating (e.g. if you're using mongoose for mongodb or the joi library for couchdb in node.js). It's referred to as 'application-level schema'. Alternatively, for no-sql databases that don't support schemas, the application has to validate the data after reading it from the database i.e. 'schema-on-read'.
 
 Back to SQL and relational databases. When we declare a column as a foreign key what we are in fact doing is simply adding a constraint at the schema level. Zero 'links' are created. Instead the database ensures that for every non-null value we add at that column, a corresponding value that it is equal to it exists as a primary key in the referenced table. This is referred to as **Referential Integrity**. For the sake of being pedantic, referential integrity is more general, it does not require the referenced column to be a primary key- the exact term we're looking for is **foreign-key constraint**.
 
@@ -118,7 +130,7 @@ create table if not exists task2(
 );
 ```
 
-As for joins, as we've seen, they boil down to row-level filters on the cross-products of tables and are carried out during query time, NOT during insertion or updating. Do note that sql databases carry out joins in a manner that's way more efficient than simply creating a mega-table via cross-products and filtering. The beauty though is that all these is abstracted away from us. That's all there is to it logically, there are no links or pointers added or to be traversed by the database user.
+As for joins, as we've seen, they boil down to row-level filters on the cross-products of tables and are carried out during query time, NOT during insertion or updating. Do note that sql databases carry out joins in a manner that's way more efficient than simply creating a mega-table via cross-products and filtering. The beauty though is that all these should be, and is abstracted away from us. That's all there is to it logically, there are no links or pointers added or to be traversed by the database user.
 
 In addition, SQL provides some niceties when it comes to foreign keys. Suppose the corresponding primary key is either deleted or modified (modifying a primary key is another red flag to be watched out for in the database design, primary keys should be as intransigient as possible). The database could be in a state where one of the values, the 'former' foreign key, in one of the columns does not belong in its specified domain, i.e. the db is in an inconsistent state, which is a big no-no in SQL databases. In order to prevent this scenario, SQL requires us to specify what should happen to the corresponding foreign keys when one attempts to delete/modify a primary key.
 
@@ -132,7 +144,7 @@ On deletion we add one of the following keywords to tell the database what cours
 
 - `on delete restrict`: we can outright prevent anyone from deleting the row with the primary key if there's any foreign key referencing it.
   If we don't specify any action, postgres defaults to _on delete no action_. The Postgres documentation explains that:
-
+  
   > RESTRICT prevents deletion of a referenced row. NO ACTION means that if any referencing rows still exist when the constraint is checked, an error is raised; this is the default behavior if you do not specify anything. (The essential difference between these two choices is that NO ACTION allows the check to be deferred until later in the transaction, whereas RESTRICT does not.)
 
 On Updates, we can also add one of the following keywords:
@@ -155,7 +167,7 @@ create table if not exists task(
 );
 ```
 
-To reiterate, we've seen how to do joins (inner joins) without using the _join_ statement. Surprisingly, when SQL was first specified, it did not have the _join_ statement at all, joins had to be carried out using cross-products and where clauses. _join_ and its variants were added to SQL in the SQL92 specification and implemented by databases subsequently.
+To reiterate, we've seen how to do joins (inner joins) without using the _join_ statement. Surprisingly, when SQL was first specified, it did not have the _join_ statement at all, joins had to be carried out using cross-products and where clauses. _join_ and its variants were added to SQL in the SQL92 specification and implemented by database vendors subsequently.
 
 Using _join_ for the same query above (in which used the cross-product and where clause) turns out as so:
 
@@ -171,7 +183,7 @@ select details, date, place
 from task t join venue v using(venue_id);
 ```
 
-And compared to cross-products plus row-level filters, using joins (if you weren't already doing so) is the best way to approach such kind of queries not only because it's much more readable (it seperates row-level filters from join predicates) but also because it'll probably run faster as most query processors optimize for it given it is the common case.
+And compared to cross-products plus row-level filters, using joins (if you weren't already doing so) is the best way to approach such kind of queries not only because it's much more readable (it seperates row-level filters from join predicates) but also because it'll probably run faster as most query processors optimize joins given it is the common case.
 
 ## Outer joins without the 'join' keyword
 
@@ -277,4 +289,4 @@ group by t.task_id
 order by total_volunteers desc;
 ```
 
-And with that, to get a full understanding of sql joins, you don't need to relate it to some wrong mental model (traversing links and pointers) or even some other high-level concept (reduction), you just have to go back to the very foundations of SQL. I'd like to give credit to Martin Kleppman's _Designing Data-Intensive Application_ which I referenced heavily for the history of databases and Jennifer Widom's _Introduction to SQL_ course which massively improved my understanding of SQL.
+And with that, to get a full understanding of sql joins, you don't need to relate it to some wrong mental model (traversing links and pointers) or even some other high-level concept (reduction), you just have to go back to the very foundations of SQL (and a bit of history). I'd like to give credit to Martin Kleppman's _Designing Data-Intensive Application_ which I referenced heavily for the history of databases and Jennifer Widom's _Introduction to SQL_ course which massively improved my understanding of SQL.
