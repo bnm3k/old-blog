@@ -16,13 +16,13 @@ The log package gives us two options: we can either create our own logger manual
 
 ### Creating a logger
 
-Using [`log.New`](https://golang.org/src/log/log.go?s=2897:2953#L52), we can create our own custom loggers. `log.New` has the following signature:
+Using [log.New](https://golang.org/src/log/log.go?s=2897:2953#L52), we can create our own custom loggers. *log.New* has the following signature:
 
 ```go
 func New(out io.Writer, prefix string, flag int) *Logger
 ```
 
-Let's start with the `out` parameter. The key thing to note, is that the argument doesn't necessarily have to be a file or one of the standard streams such as `os.Stdout`- all it has to be, or rather do, is implement the `io.Writer` interface. Here is the `io.Writer` interface:
+Let's start with the *out* parameter. The key thing to note, is that the argument doesn't necessarily have to be a file or one of the standard streams such as *os.Stdout*- all it has to be, or rather do, is implement the *io.Writer* interface. Here is the *io.Writer* interface:
 
 ```go
 type Writer interface {
@@ -32,9 +32,9 @@ type Writer interface {
 
 This does give us a lot of freedom. For my use case, I'm implementing an interface that sort of 'redirects' all log outputs to postgres.
 
-The next parameter in the `log.New` function is the `prefix` parameter. This gives us a basic way to create leveled logging, that is, different loggers can use different prefixes to set themselves apart. 
+The next parameter in the *log.New* function is the *prefix* parameter. This gives us a basic way to create leveled logging, that is, different loggers can use different prefixes to set themselves apart. 
 
-Finally, we have the `flag` parameter which adds additional prefixes to the log output. These additional prefixes can contain the date and/or the time the log was created plus  (if required) the associated filename and/or filepath from which the log was generated. In order to set the `flag` correctly, we have to use the constants that the package provides us.
+Finally, we have the *flag* parameter which adds additional prefixes to the log output. These additional prefixes can contain the date and/or the time the log was created plus  (if required) the associated filename and/or filepath from which the log was generated. In order to set the *flag* correctly, we have to use the constants that the package provides us.
 
 ### Parsing and structuring the log output (preliminaries)
 
@@ -44,9 +44,9 @@ With all the flags that give maximum information in the prefix set (Ldate | Ltim
 ERROR 2009/01/23 01:23:23.123123 /a/b/c/d.go:23: some error message
 ```
 
-This could be dumped as is directly to postgres using the `text` data type for storage. However, since I'm going through all these hassle to use Postgres, I might as well take full advantage of it and enforce a structure for the log output.
+This could be dumped as is directly to postgres using the 'text' data type for storage. However, since I'm going through all these hassle to use Postgres, I might as well take full advantage of it and enforce a structure for the log output.
 
-In order to do so, the first step is parsing the log string. This looks like a job for the almighty `regex`.
+In order to do so, the first step is parsing the log string. This looks like a job for the almighty regex.
 
 We can already see the fields that we want to extract, such as the date, the prefix, the associated file, and most importantly, the actual log message.
 
@@ -70,25 +70,23 @@ const parseLog = (() => {
 })();
 ```
 
-`parseLog` closes over the `r` pattern since I didn't want the pattern to be recompiled every time the function is called - though this might very much be unnecessary, I probably should check the relevant MDN docs on this later on.
+*parseLog* closes over the 'r' pattern since I didn't want the pattern to be recompiled every time the function is called - though this might very much be unnecessary, I probably should check the relevant MDN docs on this later on.
 
 The regex can be broken down as follows:
 
-1. `/^`: the beginning, standard stuff
+1. **/^**: the beginning, standard stuff
 
-2. `(\w+)\s+`: matches the prefix which is expected to be alphanumeric characters only plus a bit of space. When we go back to Golang, we must find a way to enforce this, for example, when creating the logger
+2. **(\w+)\s+**: matches the prefix which is expected to be alphanumeric characters only plus a bit of space. When we go back to Golang, we must find a way to enforce this, for example, when creating the logger
 
-3. `(\d{4}/\d{2}/\d{2}\s)?`: this matches the date portion of the log output plus a bit of space. However, the date can be omitted therefore the match is made optional.
+3. **(\d{4}/\d{2}/\d{2}\s)?**: this matches the date portion of the log output plus a bit of space. However, the date can be omitted therefore the match is made optional.
 
-4. `(\d{2}:\d{2}:\d{2}(.\d+)?\s)?`:  matches the time portion, the microseconds may or may not be provided. As with the date, we must also take into account that the time can be ommitted
+4. **(\d{2}:\d{2}:\d{2}(.\d+)?\s)?**:  matches the time portion, the microseconds may or may not be provided. As with the date, we must also take into account that the time can be ommitted
 
-5. `(.*\.go:\d+:\s)?`: matches the file part. From golang's documentation of the log output, we know that regardless of whether the full path or just the file name is provided, a colon is appended at the end. I'm also assuming that all files have the `.go` extension. This is a 'known unknown'. There are probably some  '[unknown unknown](https://en.wikipedia.org/wiki/There_are_known_knowns)' assumptions that I'm making in this regex pattern that might result in errors later on, but for now, these assumptions remain in the realm of the unknown unknowns.
+5. **(.*\.go:\d+:\s)?**: matches the file part. From golang's documentation of the log output, we know that regardless of whether the full path or just the file name is provided, a colon is appended at the end. I'm also assuming that all files have the '.go' extension. This is a 'known unknown'. There are probably some  '[unknown unknown](https://en.wikipedia.org/wiki/There_are_known_knowns)' assumptions that I'm making in this regex pattern that might result in errors later on, but for now, these assumptions remain in the realm of the unknown unknowns.
 
-6. `([^]*)`: Finally, this match is used to capture the actual payload of the log output. It's supposed to match every character including a newline character.
-   
-   
+6. **([^]*)**: Finally, this match is used to capture the actual payload of the log output. It's supposed to match every character including a newline character.
 
-Using `parseLog` with the sample log output provided earlier, we get:
+Using *parseLog* with the sample log output provided earlier, we get:
 
 ```javascript
 { 
@@ -100,15 +98,15 @@ Using `parseLog` with the sample log output provided earlier, we get:
 }
 ```
 
-Satisfied with the javascript `parseLog` as it is for now, the next step was to translate it to Go. This was a bit tricky for me since up to that point, I'd never used regular expressions in Go so I had to spend some time working through Go's regex package.
+Satisfied with the javascript *parseLog* as it is for now, the next step was to translate it to Go. This was a bit tricky for me since up to that point, I'd never used regular expressions in Go so I had to spend some time working through Go's regex package.
 
 ### Parsing and structuring the log outputs (Golang implementation)
 
 I usually find myself front-loading a lot of the key design decisions when using Go, which is great to some extent (most of the times) since I'm still going to have to think about and formalize such matters at some point either way. But sometimes it leads to premature over-abstraction. In javascript though, I often find myself freestyling until I arrive at what I want; it's only by forcing myself lately to use TDD that I've started front-loading design decisions in js too.
 
-Back to logging: I've opted to sort of encapsulate the regex pattern into a struct with its own `type` to allow for coupling associated methods (such as `parseLog`) and also allow for different regexes to be used depending on the logger: again a hunch tells me this might be over-abstraction...
+Back to logging: I've opted to sort of encapsulate the regex pattern into a struct with its own type to allow for coupling associated methods (such as *parseLog*) and also allow for different regexes to be used depending on the logger: again a hunch tells me this might be over-abstraction...
 
-We'll have a `type logParser` which will encapsulate the regex pattern as so:
+We'll have a type 'logParser' which will encapsulate the regex pattern as so:
 
 ```go
 type logParser struct {
@@ -116,7 +114,7 @@ type logParser struct {
 }
 ```
 
-Therefore, we'll have to supply some means for initialzing `logParser` with the default regex pattern. I used the back-ticks since when using the usual double quotes for strings, I have to escape all the backslashes in the regex pattern which is cumbersome and adds unnecessary noise. I've also used `MustCompile` since it's more terse and I am not dealing with a dynamic pattern. Lastly, in order to capture the payload, I've changed the pattern from `([^]*)` to `([\w\W]*)` since the former throws an error in Go for some reason:
+Therefore, we'll have to supply some means for initialzing *logParser* with the default regex pattern. I used the back-ticks since when using the usual double quotes for strings, I have to escape all the backslashes in the regex pattern which is cumbersome and adds unnecessary noise. I've also used *MustCompile* since it's more terse and I am not dealing with a dynamic pattern. Lastly, in order to capture the payload, I've changed the pattern from `([^]*)` to `([\w\W]\*)` since the former throws an error in Go for some reason:
 
 ```go
 func newLogParser() *logParser {
@@ -126,7 +124,7 @@ func newLogParser() *logParser {
 }
 ```
 
-Separately, there's also a `type` that captures parsed logs:
+Separately, there's also a type that captures parsed logs:
 
 ```go
 type parsedLog struct {
@@ -137,7 +135,7 @@ type parsedLog struct {
 }
 ```
 
-Back to `logParser`, the following method for parsing the logs is added:
+Back to *logParser*, the following method for parsing the logs is added:
 
 ```go
 func (lp *logParser) parseLog(str string) (*parsedLog, error) {
@@ -165,9 +163,9 @@ func (lp *logParser) parseLog(str string) (*parsedLog, error) {
 }
 ```
 
-Since I opted to store the date and time into a `time.Time` variable rather than a `string` variable, I have to convert them. Hence the `parseLogTime` function. It gives us a bit of flexibility but postgres is already great at parsing date and time strings into timestamp so this might be unnecessary work on the application's part. 
+Since I opted to store the date and time into a *time.Time* variable rather than a string variable, I have to convert them. Hence the *parseLogTime* function. It gives us a bit of flexibility but postgres is already great at parsing date and time strings into timestamp so this might be unnecessary work on the application's part. 
 
-Without further ado, here's the `parseLogTime` function. Note that the extra space that logger adds after the date and time values has to be accounted for;  in javascript land, I used `trim` to get rid of such space characters. Alternatively, I could have used extra groups to match out just the date and time portions without space in the regex but I opted for otherwise since it made the regex much harder to inspect by eye.
+Without further ado, here's the *parseLogTime* function. Note that the extra space that logger adds after the date and time values has to be accounted for;  in javascript land, I used *trim* to get rid of such space characters. Alternatively, I could have used extra groups to match out just the date and time portions without space in the regex but I opted for otherwise since it made the regex much harder to inspect by eye.
 
 ```go
 func parseLogTime(dateVal, timeVal string) (time.Time, error) {
@@ -195,22 +193,22 @@ func parseLogTime(dateVal, timeVal string) (time.Time, error) {
 }
 ```
 
-Back in `logParser`, there's also the `ErrInvalidLog` error just in case something goes wrong and feedback is required:
+Back in *logParser*, there's also the ErrInvalidLog error just in case something goes wrong and feedback is required:
 
 ```go
 //ErrInvalidLog ..
 var ErrInvalidLog = errors.New("Invalid Log. Unable to Parse")
 ```
 
-So far, all the types and methods have been private since, if this is to be repackaged into a reusable package, the user shouldn't have to care about the how the log is parsed, all they'd require is a `logger` equivalent to what Go's standard library provides.
+So far, all the types and methods have been private since, if this is to be repackaged into a reusable package, the user shouldn't have to care about the how the log is parsed, all they'd require is a logger equivalent to what Go's standard library provides.
 
 ### Setting up Postgres
 
 Before going any further, since the ultimate goal is to store the logs in Postgres, it's best to think about how the tables should be designed. 
 
-Courtesy of how `parseLogTime` is structured, there will always be a `LogTime` regardless of whether the user adds the date/time flags- the rest of the values though might be omitted. With that in mind, the log table probably needs a primary key. At first, I thought of using the `LogTime` value as the primary key for each entry, since I'll also get indexing for free which will come in handy when querying the logs. However, even if it's highly improbable, it's still quite possible that two different logs might end up having the same log time and one of them will have to be discarded (due to the uniqueness constraint for primary keys). Another alternative is to use a synthetic key (e.g. an incrementing integer) in combination, or even in leau of the timestamp. But, I opted to forgo having a primary key altogether until such a need arose - e.g. if I need to use some column in the table as a foreign key.
+Courtesy of how *parseLogTime* is structured, there will always be a *LogTime* regardless of whether the user adds the date/time flags- the rest of the values though might be omitted. With that in mind, the log table probably needs a primary key. At first, I thought of using the *LogTime* value as the primary key for each entry, since I'll also get indexing for free which will come in handy when querying the logs. However, even if it's highly improbable, it's still quite possible that two different logs might end up having the same log time and one of them will have to be discarded (due to the uniqueness constraint for primary keys). Another alternative is to use a synthetic key (e.g. an incrementing integer) in combination, or even in leau of the timestamp. But, I opted to forgo having a primary key altogether until such a need arose - e.g. if I need to use some column in the table as a foreign key.
 
-Another aspect that needs to be considered is which type to use for the `LogTime` value. Postgres provides two types for timestamps, `timestamp` and `timestamptz`. With `timestamp`, it simply takes the log time as it is and store it.  While choosing one or the other, I have to take into consideration the fact that our application and the postgres server might be running in two different timezones, or even simply that postgres is configured to a different timezone. For the time being, I went with `timestamp`, and just as with the primary key, I'll consider `timestamptz` when the need arises.
+Another aspect that needs to be considered is which type to use for the *LogTime* value. Postgres provides two types for timestamps, 'timestamp' and 'timestamptz'. With 'timestamp', it simply takes the log time as it is and store it.  While choosing one or the other, I have to take into consideration the fact that our application and the postgres server might be running in two different timezones, or even simply that postgres is configured to a different timezone. For the time being, I went with timestamp, and just as with the primary key, I'll consider timestamptz when the need arises.
 
 All in all, the table definition ends up being as follows:
 
@@ -223,17 +221,15 @@ create table log(
 );
 ```
 
-With logs, the two common kinds of queries over the table we can expect are range queries on the `log_time` column and full-text search over the text, or even simple text search. As such, I should probably add the necessary indices but I'll postpone it for now.
-
-
+With logs, the two common kinds of queries over the table we can expect are range queries on the *log_time* column and full-text search over the text, or even simple text search. As such, I should probably add the necessary indices but I'll postpone it for now.
 
 ### Writing logs to postgres
 
 Back in the Go application, the logger and postgres need to be 'glued' together.
 
-I'll offload the labor of setting up a connection to Postgres to the logger user rather than setting it up within the logger constructor. This adds a lot of flexibility. It also allows the same `*sql.DB*` instance to be reused across the application. 
+I'll offload the labor of setting up a connection to Postgres to the logger user rather than setting it up within the logger constructor. This adds a lot of flexibility. It also allows the same **sql.DB* instance to be reused across the application. 
 
-The `customOutPG` struct type will be used to encapsulate the postgres `db` instance. As the name suggests, `customOutPG` will implement the `io.Writer` interface so that it can subsequently be used within a `logger` instance. `customOut` also encapsulates a `logParser` instance for parsing logs before insertion into postgres.
+The *customOutPG* struct type will be used to encapsulate the postgres db instance. As the name suggests, *customOutPG* will implement the *io.Writer* interface so that it can subsequently be used within a *logger* instance. *customOut* also encapsulates a *logParser* instance for parsing logs before insertion into postgres.
 
 ```go
 type customOutPG struct {
@@ -267,15 +263,15 @@ func newcustomOutPG(db *sql.DB) *customOutPG {
 }
 ```
 
-The prefix is constrained to alphanumeric characters only (no spaces, tabs or special characters and symbols). This is because the regex in `parseLog` already assumes so and if this check were to be left out, it would result in certain errors and malformed outputs depending on the prefix. 
+The prefix is constrained to alphanumeric characters only (no spaces, tabs or special characters and symbols). This is because the regex in *parseLog* already assumes so and if this check were to be left out, it would result in certain errors and malformed outputs depending on the prefix. 
 
-An additional `ErrInvalidPrefix` is included to make it clear to the caller of the function:
+An additional ErrInvalidPrefix is included to make it clear to the caller of the function:
 
 ```go
 var ErrInvalidPrefix = errors.New("Invalid Prefix")
 ```
 
-Finally, the pièce de résistance, the last piece of the puzzle: implementing the `io.Writer` interface in `customOutPG`:
+Finally, the pièce de résistance, the last piece of the puzzle: implementing the io.Writer interface in *customOutPG*:
 
 ```go
 func (c *customOutPG) Write(log []byte) (int, error) {
@@ -289,7 +285,7 @@ func (c *customOutPG) Write(log []byte) (int, error) {
 }
 ```
 
-Voila!  `cOut` can now be passed directly to `log.New` with confidence. Keep in mind though,  `c.db.Exec` is ran, I probably do need to do something more intelligent when an error is returned, but for now, that budden rests with the module user.
+Voila!  *cOut* can now be passed directly to *log.New* with confidence. Keep in mind though,  *c.db.Exec* is ran, I probably do need to do something more intelligent when an error is returned, but for now, that budden rests with the module user.
 
 ### Querying logs
 
@@ -331,7 +327,7 @@ Now, so far, I've insisted on delaying optimizations and extensions (such as add
 
 The overall goal was to have workers that do the actual logging to the database, an unbounded concurrent queue and a flush operation which the application can call to ensure all pending logs have been inserted. Now, for the unbounded queue, it has its advantages, particularly high-througput but it also has it's disadvantages in that slow consumers will lead to huge (undesirable) build-up. I also wanted to avoid using mutex or external modules for this so my only option for a concurrent queue with the features I required was to use Go's channels.
 
-Without further ado, here's the code. `newOutWrapperConc` (I should get better at naming stuff), can wrap any `io.Writer`. The size of the 'queue', ie the buffer size of the channel and the number of workers are set using the `bufSize` and `logWorkers` parameters respectively.
+Without further ado, here's the code. *newOutWrapperConc* (I should get better at naming stuff), can wrap any io.Writer. The size of the 'queue', ie the buffer size of the channel and the number of workers are set using the 'bufSize' and 'logWorkers' parameters respectively.
 
 ```go
 func newOutWrapperConc(out io.Writer, bufSize, logWorkers int) *customOutConc {
@@ -350,7 +346,7 @@ func newOutWrapperConc(out io.Writer, bufSize, logWorkers int) *customOutConc {
 }
 ```
 
-As mentioned, there needs to be a 'flush' function. Before so, here's the `customOutConc` which encapsulates the `logsCh` and `wg` `sync.WaitGroup` value which as we shall see, is used to ensure each worker is done before closing.
+As mentioned, there needs to be a 'flush' function. Before so, here's the customOutConc which encapsulates the *logsCh* and *wg* sync.WaitGroup value which as we shall see, is used to ensure each worker is done before closing.
 
 ```go
 type customOutConc struct {
@@ -359,7 +355,7 @@ type customOutConc struct {
 }
 ```
 
-The workers are very simply, they receive logs from the `logsCh` and write it to the given `io.Writer`. When the channel is closed, they indicate via the `wg sync.WaitGroup` that they are done:
+The workers are very simply, they receive logs from the logsCh and write it to the given io.Writer. When the channel is closed, they indicate via the wg sync.WaitGroup that they are done:
 
 ```go
 func logWorker(out io.Writer, logsCh <-chan []byte, wg *sync.WaitGroup) {
@@ -379,7 +375,7 @@ func (cc *customOutConc) Close() {
 }
 ```
 
-Finally, the `Write` method is implemented so that the value itself can be supplied to a `logger` instance. When a log is written, it's simply sent to the `logsCh` channel so that any of the workers can write it:
+Finally, the 'Write' method is implemented so that the value itself can be supplied to a logger instance. When a log is written, it's simply sent to the *logsCh* channel so that any of the workers can write it:
 
 ```go
 func (cc *customOutConc) Write(log []byte) (int, error) {
@@ -431,7 +427,5 @@ Note, that the timestamp value is padded. The great thing about relational datab
 ```
 
 This is remedied by padding the timestamp. The prefixes should probably be padded too but I've yet to come up with an edge case that necessitates this. Compared to Sqlite, Leveldb is a fun but poor choice. As mentioned, key-value stores offer way less query flexibility compared to relational databases (via sql). Therefore, to regain some of that flexibility lost by moving from Postgres to Leveldb, a lot of application code has to be written. Furthermore, with the limited filtering options provided by key-value stores, the application probably has to read more data than is required.
-
-
 
 And that's it! PS, all the code is [here](https://github.com/nagamocha3000/db-logger-golang). I've also included a simple CLI that uses the custom logger, e.g. retrieving logs from db, clearing logs etc.
