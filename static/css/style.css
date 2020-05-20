@@ -1,0 +1,24 @@
+/* //@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap'); */
+
+.highlight {
+    background-color:#545454;
+    border-radius: 5px;
+    font-size: 0.9em;
+}
+
+p + p {
+    margin-top: 50px;
+}
+
+.highlight, blockquote {
+    margin-bottom: 45px;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+}
+
+h4.title {
+    font-size: 2em;
+}

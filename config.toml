@@ -1,0 +1,68 @@
+baseURL = "https://www.nagamocha.dev/"
+languageCode = "en-us"
+title = "Naga Mocha"
+theme = "hugo-ink"
+enableEmoji = true
+watch = true
+
+pygmentsCodefences = true
+pygmentsCodefencesGuessSyntax = true
+pygmentsStyle = "dracula"
+
+
+googleAnalytics = "UA-167226613-1"
+
+
+[params]
+	subtitle = "~foo bar~"
+
+	featherIconsCDN = true
+
+	mode = "auto" # "dark" or "auto"
+	customCSS = "css/style.css" # Custom CSS applied to default styles.
+	# customDarkCSS = "css/custom-dark.css"  # Custom styles applied to dark mode css.
+	# customJS = ["js/custom.js", "js/custom1.js"]  # Custom JS scripts.
+
+# Nav.
+[[menu.main]]
+name = "Home"
+url = "/"
+weight = 1
+
+[[menu.main]]
+name = "All posts"
+url = "/posts"
+weight = 2
+
+[[menu.main]]
+name = "About"
+url = "/about"
+weight = 3
+
+[[menu.main]]
+name = "Misc"
+url = "/misc"
+weight = 4
+
+[[menu.main]]
+name = "Tags"
+url = "/tags"
+weight = 5
+
+[[params.social]]
+name = "Github"
+icon = "github"
+url = "https://github.com/nagamocha3000"
+
+[[params.social]]
+name = "Twitter"
+icon = "twitter"
+url = "https://www.twitter.com/nagamocha"
+
+[[params.social]]
+name = "RSS"
+icon = "rss"
+url = "/index.xml"
+
+[taxonomies]
+   tag = "tags"
