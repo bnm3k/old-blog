@@ -35,7 +35,7 @@ FROM relationA
 
 
 
-If we think about the 'order' of evaluation: the _from_ gets 'evaluated' before the _select_. The _from_ is where the `join` clauses are placed. The word 'evaluated' is in quotation marks because technically, SQL engines aren't required to, nor have to evaluate a query in some given order. In fact, data-retrieval sql queries themselves aren't dictating some imperative order of evaluation in the same way 'line number' dictates order of evaluation in synchronous code. Instead, such queries describe the shape of the data we want back, which is why SQL is said to be declarative. The 'declarativess' of SQL is yet another concept I struggled with initally. And before going further, I'd like to link to a particular Julia Evans' blog [post]([https://jvns.ca/blog/2019/10/03/sql-queries-don-t-start-with-select/](https://jvns.ca/blog/2019/10/03/sql-queries-don-t-start-with-select/), which gives a more in-depth treatment of the evaluation order of SQL queries.
+If we think about the 'order' of evaluation: the _from_ gets 'evaluated' before the _select_. The _from_ is where the `join` clauses are placed. The word 'evaluated' is in quotation marks because technically, SQL engines aren't required to, nor have to evaluate a query in some given order. In fact, data-retrieval sql queries themselves aren't dictating some imperative order of evaluation in the same way 'line number' dictates order of evaluation in synchronous code. Instead, such queries describe the shape of the data we want back, which is why SQL is said to be declarative. The 'declarativess' of SQL is yet another concept I struggled with initally. And before going further, I'd like to link to a particular Julia Evans' blog [post](https://jvns.ca/blog/2019/10/03/sql-queries-don-t-start-with-select/), which gives a more in-depth treatment of the evaluation order of SQL queries.
 
 
 
@@ -43,7 +43,7 @@ Back to the SQL code we have above. As mentioned, let's suspend the technicaliti
 
 
 
-Now, [reduce](https://en.wikipedia.org/wiki/Fold_(higher-order_function) itself is a high-level concept, being one of the fundamental higher-order functions in functional programming; _reduce_ abstracts a common iteration pattern as we shall see. However, the manner in which _reduce_ is normally introduced to novices waters down its essence. The standard example used usually entails a collection of numbers and calculating a value such as a sum. For example, the MDN javascript docs provide the following sample:
+Now, [reduce](https://en.wikipedia.org/wiki/Fold_higher-order_function) itself is a high-level concept, being one of the fundamental higher-order functions in functional programming; _reduce_ abstracts a common iteration pattern as we shall see. However, the manner in which _reduce_ is normally introduced to novices waters down its essence. The standard example used usually entails a collection of numbers and calculating a value such as a sum. For example, the MDN javascript docs provide the following sample:
 
 ```javascript
 const array1 = [1, 2, 3, 4];
