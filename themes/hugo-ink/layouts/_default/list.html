@@ -7,9 +7,13 @@
 		{{ partial "head.html" . }}
 
 		{{ if isset .Data "Term" }}
+			<div class="lead">
+				<span class="sub-menu-link"><a href="/tags">All tags </a>&#8594;</span>
+			</div>
+			
 			<h2>{{ .Data.Term }}</h2>
 		{{ else }}
-		<h2 class="page-title">{{ .Name }}</h2>
+			<h2 class="page-title">{{ .Name }}</h2>
 		{{ end }}
 
 		<ul class="posts flat">

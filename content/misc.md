@@ -1,7 +1,8 @@
 ---
-title: "Misc"
+title: "Miscellaneous"
 type: "page"
 ---
 
-miscellaneous
-[Favourite quotes](/fave-quotes) 
+[All post tags](/tags)
+
+[Favourite quotes](/misc/fave-quotes) 

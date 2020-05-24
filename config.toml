@@ -4,6 +4,7 @@ title = "Naga Mocha"
 theme = "hugo-ink"
 enableEmoji = true
 watch = true
+# paginate = 10
 
 pygmentsCodefences = true
 pygmentsCodefencesGuessSyntax = true
@@ -14,7 +15,7 @@ googleAnalytics = "UA-167226613-1"
 
 
 [params]
-	subtitle = "~foo bar~"
+	subtitle = ":: foo bar ::"
 
 	featherIconsCDN = true
 
@@ -30,24 +31,14 @@ url = "/"
 weight = 1
 
 [[menu.main]]
-name = "All posts"
-url = "/posts"
-weight = 2
-
-[[menu.main]]
 name = "About"
 url = "/about"
-weight = 3
+weight = 2
 
 [[menu.main]]
 name = "Misc"
 url = "/misc"
-weight = 4
-
-[[menu.main]]
-name = "Tags"
-url = "/tags"
-weight = 5
+weight = 3
 
 [[params.social]]
 name = "Github"

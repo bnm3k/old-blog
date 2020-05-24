@@ -6,6 +6,9 @@
 		{{ partial "head.html" . }}
 
 		<div class="recent-posts section">
+			<div class="lead">
+				<span><a href="/posts">All posts </a>&#8594;</span>
+			</div>
 			<div class="posts">
 				{{ $pages := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}
 				{{ $paginator := .Paginate (where $pages "Params.hidden" "ne" true) }}

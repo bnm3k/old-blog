@@ -1,11 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@350;500&display=swap');
+/*@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&display=swap'); */
 
 body {
     font-family: "Inter", sans-serif;
-    font-weight: 200;
+    font-weight: 350;
     color: #333;
     line-height: 1.8em;
-    font-size: 18px;
+    font-size: 20px;
+    text-rendering: optimizeLegibility;
+    letter-spacing: 0.09px;
 }
 
 strong {
@@ -21,8 +24,8 @@ p a {
     border-bottom: 1px solid #4a4a4a;
 }
 a:hover {
-    border-bottom: 1px dotted #4a4a4a;
-    color: #4a4a4a !important;
+    border-bottom: 1px dashed #4a4a4a;
+    color: inherit;
 }
 
 
@@ -32,13 +35,13 @@ html,button,input,select,textarea {
 }
 
 ::-moz-selection {
-    background: #ffabab;
+    background: rgb(190, 190, 190);
     text-shadow: none;
     color: #fff;
 }
 
 ::selection {
-    background: #ff4040;
+    background: rgb(190, 190, 190);
     text-shadow: none;
     color: #fff;
 }
@@ -137,6 +140,7 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 500;
     line-height: 1.3em;
     margin: 30px 0 20px 0;
+    font-family: 'Playfair Display', serif;
 }
 
 h1 {
@@ -153,6 +157,11 @@ h3 {
 
 h4 {
     font-size: 2rem;
+}
+
+
+h4.title {
+    font-size: 2em;
 }
 
 h5 {
@@ -259,7 +268,6 @@ ul {
         border: 0
 }
 .site-title a:hover {
-    color: red;
     border-bottom-width: 3px;
 }
 
@@ -288,7 +296,7 @@ ul {
         color: #333;
     }
     .header nav.social a:hover {
-        color: #ff3030;
+        color: #6e6e6e;
     }
 
 .header .site-description nav {
@@ -330,8 +338,12 @@ ul {
     letter-spacing: 1px;
 }
 
-.recent-posts .posts .post {
+.recent-posts .posts .post, .recent-posts .lead {
     margin-bottom: 45px;
+}
+
+.recent-posts .lead a, .list .lead a{
+    text-decoration: underline;
 }
 
 .post-header {
@@ -353,7 +365,7 @@ ul {
 }
 .post-header .meta .date .rest {
     display: block;
-    font-size: 0.75em;
+    font-size: 13px;
 }
 .post-header h1.title {
     margin: -10px 0 0 0;
@@ -379,14 +391,18 @@ ul {
 
 .post .tags a {
     display: inline-block;
-    border: 1px solid #ff3030;
+    border: 1px solid #525252;
     border-radius: 3px;
     padding: 0px 6px;
-    color: #ff3030;
     line-height: 20px;
     font-size: 0.85em;
     text-decoration: none;
     margin: 0 10px 0 0;
+}
+
+.post .tags a:hover {
+    color:white;
+    background-color: #525252;
 }
 
 .list .posts .post-header .meta {
@@ -402,12 +418,11 @@ ul {
     margin-top: 40px;
     padding: 15px 0;
 }
-    .footer a {
-        color: #666;
-    }
-    .footer a:hover {
-        color: #ff3030;
-    }
+
+footer {
+    height: 400px
+}
+
 
 .tag-cloud {
     margin-top: 20px;
