@@ -1,5 +1,5 @@
 ---
-title: "Misc"
+title: "Other"
 type: "page"
 ---
 
