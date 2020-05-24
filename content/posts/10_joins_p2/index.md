@@ -6,7 +6,7 @@ description: "Writing SQL joins without using joins at all. A quick history of D
 tags: ["sql", "databases"]
 ---
 
-Now, I've written [previously](https://www.nagamocha.dev/sql-joins-p1/) on how, when learning SQL, I had trouble understanding joins conceptually and even at a much more technical level. Usually, joins are presented to learners as is since, after all, SQL is a declarative language and the user ought to focus on framing the correct question or rather query, and let the database engine figure out *how* to answer it correctly. It's tempting to try to figure out the 'how', worse so as a beginner, and at first I wrongly assumed that joins in sql follow a sort of pointer or link when a column in a table is declared as a foreign key to primary key in another table. 
+Now, I've written [previously](/posts/sql-joins-p1/) on how, when learning SQL, I had trouble understanding joins conceptually and even at a much more technical level. Usually, joins are presented to learners as is since, after all, SQL is a declarative language and the user ought to focus on framing the correct question or rather query, and let the database engine figure out *how* to answer it correctly. It's tempting to try to figure out the 'how', worse so as a beginner, and at first I wrongly assumed that joins in sql follow a sort of pointer or link when a column in a table is declared as a foreign key to primary key in another table. 
 
 
 

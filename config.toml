@@ -3,12 +3,13 @@ languageCode = "en-us"
 title = "Naga Mocha"
 theme = "hugo-ink"
 enableEmoji = true
-watch = true
+# watch = true
 # paginate = 10
 
 pygmentsCodefences = true
 pygmentsCodefencesGuessSyntax = true
 pygmentsStyle = "dracula"
+pluralizeListTitles =  false
 
 
 googleAnalytics = "UA-167226613-1"
