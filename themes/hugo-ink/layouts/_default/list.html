@@ -15,6 +15,11 @@
 		{{ else }}
 			<h2 class="page-title">{{ .Name }}</h2>
 		{{ end }}
+		<div class="post">
+		<div class="markdown">
+			{{ .Content }}
+		</div>
+	</div>
 
 		<ul class="posts flat">
 			{{- range .Data.Pages -}}

@@ -37,8 +37,8 @@ url = "/about"
 weight = 2
 
 [[menu.main]]
-name = "Other"
-url = "/other"
+name = "Misc"
+url = "/misc"
 weight = 3
 
 [[params.social]]

@@ -8,4 +8,3 @@ type: "page"
 [Favourite quotes](/misc/fave-quotes) 
 
 [Favourite articles](/misc/fave-articles) 
-
