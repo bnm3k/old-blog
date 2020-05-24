@@ -35,11 +35,6 @@ name = "About"
 url = "/about"
 weight = 2
 
-[[menu.main]]
-name = "Misc"
-url = "/misc"
-weight = 3
-
 [[params.social]]
 name = "Github"
 icon = "github"
