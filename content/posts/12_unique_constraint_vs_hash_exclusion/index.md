@@ -2,7 +2,7 @@
 title: "Speeding up unique constraint checks in Postgres... or not"
 slug: exclusion-constraints-hash-indices
 date: 2020-05-28
-description: "Are exclusion constraints using hash indexes faster that plain old uniqueness checks? Let's find out"
+description: "Are exclusion constraints using hash indexes faster than plain old uniqueness checks? Let's find out"
 tags: ["Postgres", "sql"]
 ---
 
