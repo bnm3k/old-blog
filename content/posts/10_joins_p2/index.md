@@ -1,16 +1,16 @@
 ---
-title: "Back To Basics: SQL Joins, P2"
+title: "Back To Basics: The foundation of Joins in SQL"
 slug: sql-joins-p2
 date: 2020-01-06
 description: "Writing SQL joins without using joins at all. A quick history of Database Models, Schemas, Constraints, Cross-products and everything in between"
 tags: ["sql", "databases"]
 ---
 
-Now, I've written [previously](/posts/sql-joins-p1/) on how, when learning SQL, I had trouble understanding joins conceptually and even at a much more technical level. Usually, joins are presented to learners as is since, after all, SQL is a declarative language and the user ought to focus on framing the correct question or rather query, and let the database engine figure out *how* to answer it correctly. It's tempting to try to figure out the 'how', worse so as a beginner, and at first I wrongly assumed that joins in sql follow a sort of pointer or link when a column in a table is declared as a foreign key to primary key in another table. 
+Now, I've written [previously](/posts/sql-joins-p1/) on how, when learning SQL, I had trouble understanding joins conceptually and even at a much more technical level. Usually, joins are presented to learners as is since, after all, SQL is a declarative language and the user ought to focus on framing the correct query, and let the database engine figure out *how* to answer it correctly. It's tempting to try to figure out the 'how', worse so as a beginner, and at first I wrongly assumed that joins in sql follow a sort of pointer or link when a column in a table is declared as a foreign key to primary key in another table. 
 
 
 
-I quickly discarded this assumption when I encountered queries that didn't fit to it. In the end, I settled on 'joins as a reduce/fold over tables' as detailed in the post. However, I was still left with the lingering thought that joins have something to do with foreign keys since all the queries I had come across at that point always involved both. As such, I had to dig deeper. This article therefore is a deep-dive for SQL beginners (and even those at the intermediate-level) on how joins and foreign keys fit into SQL. Spoiler alert, joins are not interlinked in any way with foreign keys; joins are basically row-level filters and in fact, any query written using joins can be rewritten without them (with a little help from **cross products**). On the other hand, foreign keys (as an abstraction) are nothing more than constraints that ensure the value in a given column is a primary key in some other table. 
+I quickly discarded this assumption when I encountered queries that didn't fit to it. In the end, I settled on 'joins as a reduce/fold over tables' as detailed in the linked post above. However, I was still left with the lingering thought that joins have something to do with foreign keys since all the queries I had come across at that point always involved both. As such, I had to dig deeper. This article therefore is a deep-dive for SQL beginners (and even those at the intermediate-level) on how joins and foreign keys fit into SQL. Spoiler alert, joins are not interlinked in any way with foreign keys; joins are basically row-level filters and in fact, any query written using joins can be rewritten without them (with a little help from **cross products**). On the other hand, foreign keys (as an abstraction) are nothing more than constraints that ensure the value in a given column is a primary key, (or unique) in some other table. 
 
 
 
@@ -289,4 +289,7 @@ group by t.task_id
 order by total_volunteers desc;
 ```
 
-And with that, to get a full understanding of sql joins, you don't need to relate it to some wrong mental model (traversing links and pointers) or even some other high-level concept (reduction), you just have to go back to the very foundations of SQL (and a bit of history). I'd like to give credit to Martin Kleppman's _Designing Data-Intensive Application_ which I referenced heavily for the history of databases and Jennifer Widom's _Introduction to SQL_ course which massively improved my understanding of SQL.
+And by they way, if you're curious about how Postgres manages foreign key references for primary keys, its documentation provides the following. I presume it's the same with other major relational databases.
+> A foreign key must reference columns that either are a primary key or form a unique constraint. This means that the referenced columns always have an index (the one underlying the primary key or unique constraint); so checks on whether a referencing row has a match will be efficient. Since a DELETE of a row from the referenced table or an UPDATE of a referenced column will require a scan of the referencing table for rows matching the old value, it is often a good idea to index the referencing columns too. Because this is not always needed, and there are many choices available on how to index, declaration of a foreign key constraint does not automatically create an index on the referencing columns. - https://www.postgresql.org/docs/12/ddl-constraints.html
+
+With that, I'd like to give credit to Martin Kleppman's _Designing Data-Intensive Application_ which I referenced heavily for the history of databases and Jennifer Widom's _Introduction to SQL_ course which massively improved my understanding of SQL.
