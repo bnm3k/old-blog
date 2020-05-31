@@ -16,7 +16,7 @@ googleAnalytics = "UA-167226613-1"
 
 
 [params]
-	subtitle = ":: foo bar ::"
+	subtitle = "select time 'allballs';"
 
 	featherIconsCDN = true
 
