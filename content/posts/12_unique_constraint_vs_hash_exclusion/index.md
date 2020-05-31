@@ -56,6 +56,12 @@ create table orders(
 
 So far though, if you've noticed, I've been using integers. Before making any further conclusions and dismissing hash indexes entirely, it's only fair that they're measured up in the one area where they excel quite well, comparing lengthy strings. And as expected, they do truly shine here. I began with UUID's since I didn't have to write an extra function for generating random strings. With plain old `unique`, it takes 32.96 seconds to insert a million UUIDs. It gets worse when inserting the next million UUIDS, 50.557 seconds. On the other hand, when using the hash-index based exclusion check, it takes 12.537 seconds to insert the first set of a million UUIDs, 12.764 to insert the next set and finally 16.24 seconds to insert the third set - quite impressive. I'll be sure to try comparing both with random strings of different lengths but I expect similar results. And yeah, that's definitely one way to speed up uniqueness constraint checks if the column's type is a string, rather than an integer and it won't be referenced elsewhere in the database. 
 
+---
+ADDENDUM  
+After writing up this post, I searched online to check how others are using this method and what issues they've come across. Here's one important consideration I came across to keep in mind. It's from the discussion 'Postgres hash index with unique constraint' on StackOverflow ([link](https://stackoverflow.com/questions/44274080/postgres-hash-index-with-unique-constraint)). Using exclusion constraints to enforce uniqueness does not work with upserts (i.e. insert ... on conflict do *action*) since, to quote the user [jbg](https://stackoverflow.com/questions/44274080/postgres-hash-index-with-unique-constraint#comment104844932_57288579): "there could be multiple rows that conflicted when using an exclusion constraint (even though in this specific case it would always be one row), in which case it wouldn't be clear which conflicting row should be updated".
+
+--- 
 REFERENCES  
 1. Postgres documentation, Constraints: https://www.postgresql.org/docs/12/ddl-constraints.html#DDL-CONSTRAINTS-UNIQUE-CONSTRAINTS
 2. Hash indexes are faster than Btree indexes?: http://amitkapila16.blogspot.com/2017/03/hash-indexes-are-faster-than-btree.html
+3. Postgres hash index with unique constraint: https://stackoverflow.com/questions/44274080/postgres-hash-index-with-unique-constraint
