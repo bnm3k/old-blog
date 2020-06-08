@@ -26,7 +26,7 @@
 					Tags:
 						<!-- <ul class="flat"> -->
 							{{ range .Params.tags }}
-							<a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a>
+							<a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">#{{ . }}</a>
 							{{ end }}
 						<!-- </ul> -->
 					{{ end }}
@@ -36,6 +36,14 @@
 			<div class="markdown">
 				{{ .Content }}
 			</div>
+			<script src="https://utteranc.es/client.js"
+				repo="nagamocha3000/nagamocha-blog"
+				issue-term="pathname"
+				label="comment"
+				theme="dark-blue"
+				crossorigin="anonymous"
+				async>
+			</script>
 
 
 

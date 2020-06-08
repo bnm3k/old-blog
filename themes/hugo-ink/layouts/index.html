@@ -34,8 +34,19 @@
 										{{ .RawContent }}
 									{{ end }}
 								</span>
+								{{ if gt .Params.tags 0 }}
+								<div class="taglist">
+									<!-- <ul class="flat"> -->
+										{{ range .Params.tags }}
+										<a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">#{{ . }}</a>
+										{{ end }}
+									<!-- </ul> -->
+								</div>
+								{{ end }}
 							</div>
+
 						</div>
+
 					</div>
 				{{ end }}
 				{{ template "partials/paginator.html" . }}

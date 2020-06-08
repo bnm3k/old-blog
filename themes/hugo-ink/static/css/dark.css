@@ -1,10 +1,15 @@
 html.dark body {
   color: #ddd;
-  background-color: #2b2b2b;
+  background-color: #161625;
 }
 
 html.dark * a {
   color: #ddd;
+}
+
+html.dark * .title a{
+  color: #a4e0b6;
+  /* color: #38b2ac; */
 }
 
 html.dark ::-moz-selection {
@@ -57,6 +62,11 @@ html.dark * a:hover{
   border-bottom: 2px dashed #ddd;
 }
 
+html.dark * .title a:hover{
+  border-bottom: 0px;
+}
+
+
 html.dark table tbody tr:nth-of-type(even) {
   background-color: rgba(255, 255, 255, 0.15);
 }
@@ -93,7 +103,7 @@ html.dark .footer {
   border-color: #333;
 }
 
-html.dark .highlight {
-  background-color: #333;
-}
+/* html.dark .highlight {
+  background-color: green;
+} */
 

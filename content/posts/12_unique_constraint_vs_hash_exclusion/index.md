@@ -6,7 +6,7 @@ description: "Are exclusion constraints using hash indexes faster than plain old
 tags: ["Postgres", "sql"]
 ---
 
-Intuitively, or rather theoretically (since this doesn't even require intuition), using hash indexes over Btree indexes for equality lookups should be faster: O(1) vs O(log n). And as is expected, various benchmarks confirm this. However, when it comes to enforcing uniqueness in a given column, hash indexes don't perform so well. 
+Intuitively, (and even theoretically), using hash indexes over Btree indexes for equality lookups should be faster: O(1) vs O(log n). And as is expected, various benchmarks confirm this. However, when it comes to enforcing uniqueness in a given column, hash indexes don't perform so well. 
 
 The standard way of adding a uniqueness constraint to a column, is by declaring it when creating the table. For example:
 ```sql

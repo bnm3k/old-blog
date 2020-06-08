@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@350;500&display=swap');
-/*@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
+
 
 body {
     font-family: "Inter", sans-serif;
-    font-weight: 350;
+    font-weight: 400;
     color: #333;
     line-height: 1.8em;
     font-size: 20px;
@@ -28,7 +28,9 @@ a:hover {
     color: inherit;
 }
 
-
+p + p {
+    margin-top: 50px;
+}
 
 html,button,input,select,textarea {
     color: #333;
@@ -140,7 +142,7 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 500;
     line-height: 1.3em;
     margin: 30px 0 20px 0;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Fira Sans', sans-serif;;
 }
 
 h1 {
@@ -225,21 +227,29 @@ ul {
     padding: 20px;
     font-size: 0.9em;
     line-height: 160%;
-    background-color: transparent !important;
+    border-radius: 10px;
 }
 
 .highlight {
-    background: 0 0;
-    /* background-color: #FAFAFA; */
+    border-radius: 10px;
+}
+
+.highlight, blockquote {
+    margin-bottom: 45px;
 }
 
 .wrapper {
-    max-width: 760px;
+    max-width: 900px;
     margin: 0 auto;
 }
 
 .container {
-    max-width: 760px;
+    margin-top: 50px;
+}
+
+.container .markdown {
+    width: 750px;
+    margin: 0 auto;
     margin-top: 50px;
 }
 
@@ -307,6 +317,12 @@ ul {
     margin-left: 15px;
 }
 
+.site-description code {
+    margin-top: 15px;
+    font-size: 0.6em;
+    color: gray;
+}
+
 .header .site-description nav ul svg {
     max-height: 15px;
 }
@@ -355,8 +371,8 @@ ul {
     text-align: center;
 }
 .post-header .meta .date .day {
-    font-family: "Playfair Display", serif;
-    font-weight: 700;
+    font-family: "Times New Roman";
+
     line-height: 0.45em;
     font-size: 3em;
     display: block;
@@ -374,10 +390,10 @@ ul {
 
 .post .title.small {
     margin: 0 0 10px 0;
+    font-size: 1.5em;
 }
 .post .post-header {
     margin-bottom: 30px;
-
 }
 
 .post .draft-label {
@@ -393,7 +409,7 @@ ul {
     display: inline-block;
     border: 1px solid #525252;
     border-radius: 3px;
-    padding: 0px 6px;
+    padding: 1px 6px;
     line-height: 20px;
     font-size: 0.85em;
     text-decoration: none;
@@ -501,3 +517,11 @@ footer {
       width: 100%;
     }
 }
+
+
+div.taglist a{
+    color: #7d7d7d !important;
+    font-size: 0.7em;
+    margin-right: 10px;
+}
+
