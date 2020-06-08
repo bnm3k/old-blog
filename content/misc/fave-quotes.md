@@ -30,3 +30,7 @@ To wrestle with the angel...Art."
 
 "To put meaning in one's life may end in madness, But life without meaning is the torture Of restlessness and vague desire— It is a boat longing for the sea and yet afraid"  
 — Edgar Lee Masters
+
+Howard Hughes: "Does that look clean to you?"  
+Ava Gardner: "Nothing's clean, Howard. But we do our best, right?"  
+— The Aviator
