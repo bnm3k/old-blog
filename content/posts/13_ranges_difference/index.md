@@ -8,20 +8,18 @@ draft: true
 ---
 
 
-Amongst the interesting data-types offered in Postgres are the Range Types such as the daterange and int4range. If you haven't encountered them yet, Postgres' own [documentation](www.postgresql.org/docs/current/rangetypes.html) is a great place to start. Postgres also [offers](www.postgresql.org/docs/current/functions-range.html) range-specific functions and operators that enrich the use of ranges. One of these operators is the difference operator, `-` which is better demonstrated with sql code: 
+Amongst the interesting data-types offered in Postgres are the Range Types, such as the daterange and int4range. If you haven't encountered them yet, Postgres' own [documentation](www.postgresql.org/docs/current/rangetypes.html) is a great place to start. Postgres also [offers](www.postgresql.org/docs/current/functions-range.html) range-specific functions and operators that enrich the use of ranges. One of these operators is the difference operator, '`-`' which uses the minus symbol and is better demonstrated with sql code: 
 
 ```sql
 select int4range(1, 10) - int4range(5, 15);
 -- [1,5)
 ```
 
+If we think of the int4ranges as sets in the mathematical sense, `int4range(1, 10)` represents the set of all integers greater than or equal to 1 but less than 10. By default the lower bound is inclusive and the upper bound is exclusive. The same's the case with `int4range(5, 15)`. Therefore, the difference operation above results in a range consisting of all integers that are in the first range but are not elements of the second range, hence `[1,5)` -  the set difference. 
 
+![Image showing intersection between range 1 to 10 and 5 to 15](images/image1.png)
 
-If we think of the int4ranges as sets in the mathematical sense, `int4range(1, 10)` represents the set of all integers greater than or equal to one but less than 10. By default the lower bound is inclusive and the upper bound is exclusive. The same's the case with `int4range(5, 15)`. Therefore, the difference above results in a range consisting of all integers in that are in the first range but are not elements of the second range, hence `[1,5)` -  the set difference. 
-
-
-
-For most of the cases, range difference operates pretty much as one would expect of set difference, even when both ranges are entirely disjoint. However, if the second operand is fully contained within the first operand, range difference fails.
+For most of the cases, range difference operates pretty much as one would expect of set differences, even when both ranges are entirely disjoint. However, if the second operand is fully contained within the first operand, the range difference fails.
 
 ```sql
 select 
@@ -33,12 +31,10 @@ select
 This makes sense since, as the error message indicates, we end up with disjoint sets. Without such a restriction, the return value would have been `[1,10), [20,100)` but then, the column in the resulting table would have to accomodate more than 1 value at a go, breaking the relational model. 
 
 
-
-// PICTURE HERE
-
+![Image showing range 10 to 20 as a subset of range 1 to 100](images/image2.png)
 
 
-Still, a generalized range difference (that handles all cases) is useful for various applications. One chief example is on search availability, as detailed in Jonathan Katz's [blog post](https://info.crunchydata.com/blog/range-types-recursion-how-to-search-availability-with-postgresql) for Crunchy Data. In a nutshell, given a set of date/time ranges that indicate when an item or a room or a schedule is booked, find all the freely available slots within a given range i.e. the 'gaps'. I'd suggest you go through Katz's post first if you have a couple of minutes to spare. Specifically, you should check out the sql implementation of his solution for the search availability problem - it took me a while to wrap my head around the `travels_get_available_dates` function in the post but it was well worth it given its ingenuity and display of SQL mastery. However, when I transcribed the code and ran it on a couple of values, the function kept erroring out on date ranges that were directly adjacent to each other. This could entirely be attributed to coding errors on my part but overally, it prompted me to try working out a different approach that's hopefully as efficient as Katz's while handling such edge cases correctly. Hence this post. 
+Still, a generalized range difference (that handles all cases) is useful for various applications. One chief example is on search availability, as detailed in Jonathan Katz's [blog post](https://info.crunchydata.com/blog/range-types-recursion-how-to-search-availability-with-postgresql) for Crunchy Data. In a nutshell, given a set of date/time ranges that indicate when an item or a room or a schedule is booked, find all the freely available slots within a given range i.e. the 'gaps'. I'd suggest you go through Katz's post first if you have a couple of minutes to spare. Specifically, you should check out the sql implementation of his solution for the search availability problem - it took me a while to wrap my head around the `travels_get_available_dates` function in the post but it was well worth it given its ingenuity. However, when I transcribed the code and ran it on a couple of values, the function kept erroring out on date ranges that were directly adjacent to each other. This could entirely be attributed to coding errors on my part but overally, it prompted me to try working out a different approach that's able to handle such edge cases correctly all while maintaining efficiency. Hence this post. 
 
 
 
@@ -48,20 +44,19 @@ Before getting to my approach for search availability, I'd like to point out tha
 
 Okay, here's an overview of my approach. Given a range `[A,B]` we want to find all the freely available slots.
 
-1. First, narrow down solely to booked slots, that overlap/intersect with range `[A,B]`.
+1. First, narrow down exclusively to booked slots, that overlap or intersect with the search range `[A,B]`.
 2. Sort the booked slots from the smallest to the largest
 3. From there, iterate over the booked slots in ascending order
-4. With each iteration, the booked slot divides `[A,B]` into two sections, the freely available chunk, which is in the left, and the remainder chunk for further probing. This is better demonstrated with a diagram as shown below.
-5. On completion, we end up with all the freely available chunks!
+4. With each iteration, the booked slot divides `[A,B]` into two sections, the freely available chunk, which is in the left, and the remainder chunk for further probing as shown in the diagram below
+5. Gather up all the freely available chunks and on completion, we end up with all the freely available chunks!
 
 
 
-// PICTURE HERE
+![Image showing how a booked slot divides up a given range](images/image3.png)
 
 
 
-Now, the next hurdle is translating the logic to SQL, which was a bit hard for me at first since it's imperative (and as we all know, SQL is declarative). Moreover, I had the inkling that it might end up being quite inefficient, but we'll get to that part later on. Like Katz, my approach relies on recursive CTEs. As a side-note, even though SQL uses the keyword `with recursive`, I've always found it easier to think of recursive CTEs as iteration as the Postgres documents suggest: we start with the base case. and for each 'iteration', we build a working table which is 'appended' to the base case; iteration stops once the working table is empty i.e there's nothing more to add to the overall CTE.
-
+Now, the next hurdle is translating the logic to SQL, which was a bit hard for me at first since it's imperative (and as we all know, SQL is declarative). Moreover, I had the inkling that it might end up being quite inefficient, but we'll get to that part later on. Like Katz, my approach relies on recursive CTEs. As a side-note, even though SQL uses the keyword `with recursive`, I've always found it easier to think of recursive CTEs as iteration just as the Postgres documents suggest: we start with the base case as the result table and for each 'iteration', we build a working table which is 'appended' to the result table. Iteration stops once the working table is empty i.e there's nothing more to add to the final result table.
 
 
 For the sake of tinkering and debugging, I shifted from dateranges to int4ranges since they are much easier to read and inspect. The demo table I used is defined as follows:
@@ -132,14 +127,14 @@ From there, the `already_booked` range value is used to split up the `possible` 
 
 
 
-// PICTURE HERE
+![Image showing all the different variations a booked slot intersects with a given search range](images/image4.png)
 
 
 
 Finally, let's talk about termination. There are two possible approaches that I had in mind:
 
 1. use `where` clause for the working table to determine when there are no more slots to consider
-2. use `union`...
+2. use the `union` clause...
 
 
 
@@ -147,13 +142,13 @@ As you've seen in the code-sample above, I opted for the second option. It works
 
 
 
-I arrived at this option entirely by accident since I forgot to add the where clause, but somehow it kept on working. When I noticed it, at first I thought it was a bug that might result in an infinite loop given the following scenario: the SQL engine decides to pluck out the duplicate from the final table rather than the working table which then remains non-empty. If this is done over and over again, well, we end up with an infinite loop. However, the Postgres documentation does seem to guarantee that the duplicate row will be plucked out from the working table rather than the result table - [link](https://www.postgresql.org/docs/9.1/queries-with.html):
+I arrived at this option entirely by accident since I forgot to add the where clause, but somehow it kept on working. When I noticed it, at first I thought it was a bug that might result in an infinite loop given the following scenario: the SQL engine decides to pluck out the duplicate from the final table rather than the working table which then remains non-empty. If this is done over and over again, well, we end up with the infinite loop. However, Postgres' documentation does seem to guarantee that the duplicate row will be plucked out from the working table rather than the result table - [link](https://www.postgresql.org/docs/9.1/queries-with.html):
 
 > ... Evaluate the recursive term, substituting the current contents of the working table for the recursive self-reference. For UNION (but not UNION ALL), discard duplicate rows and rows that duplicate any previous result row...
 
 
 
-Still, for the sake of clarity, I opted for the `where clause` to make the termination condition explicit. All in all, to make the logic reusable, I wrapped it into an SQL function. I also shifted to `union all` since as long as booked slots don't overlap, there shouldn't be any duplicate rows in the result to begin with.
+Still, for the sake of clarity, I opted for the `where clause` to make the termination condition explicit. All in all, for reusability, I wrapped it into an SQL function. I also shifted to `union all` since as long as booked slots don't overlap, there shouldn't be any non-empty duplicate rows in the result to begin with.
 
 ```sql
 create or replace function get_available(int4range)
@@ -193,4 +188,4 @@ $$ language sql stable;
 
 
 
-Now, for the moment of truth, how does it measure up against Katz's solution. In terms of ease of understanding, it's definitely simpler. However, what should matter more is its efficiency. Before comparing both, my assumption was that Katz's approach should take the cake since it operates with a larger working table during each recursive step hence narrows down the options much faster, whereas mine takes a single row at a go. For the test data, all the slots were non-overlapping and non-adjacent. Given 4 booked slots, my approach took 2.057 ms whereas Katz's took 4.633 ms to return all the available slots. Now, this is where things get interesting - given 18 booked slots, mine took 3.584 ms vs. 3392.68 ms! At 42 slots, it ends up as 10.454 ms vs. ∞. And with 2,284 slots, 5689.236 ms vs. ∞ ^ ∞. Just kidding on the infinity part, but I had to cancel Katz's query since it was taking too long. Now, there are a lot of factors skewing the results, the chief one being, my laptop's hard disk is almost full and I should probably move stuff out to an external hard disk. But I'm glad that my approach wasn't relatively as slow as I'd earlier presumed. So if you're interested, you can definitely try to benchmark both versions and see what works best for you!  All comments, suggestions and corrections are welcome
+Now, for the moment of truth, how does it measure up against Katz's solution. In terms of ease of understanding, it's definitely simpler. However, what should matter more is its efficiency. Before comparing both, my assumption was that Katz's approach should take the cake since it operates with a larger working table during each recursive step, hence narrows down the options much faster, whereas mine works with a single row at a go. For the test data, all the slots were non-overlapping and non-adjacent. Given 4 booked slots, my approach took 2.057 ms whereas Katz's took 4.633 ms to return all the available slots. Now, this is where things get interesting - given 18 booked slots, mine took 3.584 ms vs. 3392.68 ms! At 42 slots, it ends up as 10.454 ms vs. ∞. And with 2,284 slots its 5689.236 ms vs. ∞ ^ ∞. Just kidding on the infinity part, but I had to cancel Katz's query since it was taking too long. Now, there are a lot of factors skewing the results, the chief one being, my laptop's hard disk is almost full and I should probably move stuff out to elsewhere. But I'm glad that my approach wasn't relatively as slow as I'd earlier presumed. So if you're interested, you can definitely try to benchmark both versions and see what works best for you! All comments, suggestions and corrections are welcome.
