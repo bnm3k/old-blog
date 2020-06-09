@@ -6,7 +6,14 @@
 			</a>
 		</div>
 	{{ end }}
-	<h1 class="site-title"><a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></h1>
+
+	{{ if ne .Type "page" }}
+		<h1 class="site-title site-title-within-post"><a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></h1>
+	{{ else }}
+		<h1 class="site-title"><a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></h1>
+	{{ end }}
+
+
 	<div class="site-description">
 		{{- if isset .Site.Params "subtitle" -}}
 		<code>{{ .Site.Params.Subtitle | markdownify }}</code>

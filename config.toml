@@ -18,6 +18,8 @@ googleAnalytics = "UA-167226613-1"
 [params]
 	subtitle = "select time 'allballs';"
 
+	avatar = "/coffee.png"
+
 	featherIconsCDN = true
 
 	mode = "dark" # "dark" or "auto"

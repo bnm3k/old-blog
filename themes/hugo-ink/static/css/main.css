@@ -248,7 +248,7 @@ ul {
 }
 
 .container .markdown {
-    width: 750px;
+    max-width: 750px;
     margin: 0 auto;
     margin-top: 50px;
 }
@@ -287,7 +287,7 @@ ul {
 }
 
 .header nav {
-    border-top: 1px solid #eee;
+    border-top: 3px solid #a4e0b6;
     padding-top: 15px;
 }
 
@@ -399,10 +399,12 @@ ul {
 .post .draft-label {
     color: #3700ff;
     text-decoration: none;
-    padding: 2px 4px;
+    padding: 1px 6px;
     border-radius: 4px;
     margin-left: 6px;
+    margin-top:10px;
     background-color: #f9f2f4;
+    font-size: 0.7em;
 }
 
 .post .tags a {
@@ -525,3 +527,6 @@ div.taglist a{
     margin-right: 10px;
 }
 
+img {
+    border-radius: 10px;
+}
