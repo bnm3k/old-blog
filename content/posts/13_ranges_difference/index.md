@@ -4,7 +4,6 @@ slug: range-difference-search-availability
 date: 2020-06-07
 description: "We're building a scheduling app. Users mark booked slots, represented in Postgres using time or date-range data types. Let's see how we can find all the freely available slots efficiently"
 tags: ["Postgres", "sql"]
-draft: true
 ---
 
 
