@@ -142,7 +142,7 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 500;
     line-height: 1.3em;
     margin: 30px 0 20px 0;
-    font-family: 'Fira Sans', sans-serif;;
+    font-family: 'Fira Sans', sans-serif;
 }
 
 h1 {
@@ -260,7 +260,7 @@ ul {
 
 .header .avatar {
     float: left;
-    margin: -25px 20px 0 0;
+     margin: -27px 10px 0 10px; 
 }
 .header .avatar img {
     width: 64px;
@@ -319,6 +319,7 @@ ul {
 
 .site-description code {
     margin-top: 15px;
+    margin-left: 2px;
     font-size: 0.6em;
     color: gray;
 }

@@ -1,22 +1,25 @@
 <div class="header">
-	{{ if .Site.Params.Avatar }}
-		<div class="avatar">
-			<a href="{{ .Site.BaseURL }}">
-				<img src="{{ .Site.Params.Avatar }}" alt="{{ .Site.Title }}" />
-			</a>
-		</div>
-	{{ end }}
-
-	{{ if ne .Type "page" }}
-		<h1 class="site-title site-title-within-post"><a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></h1>
-	{{ else }}
+	{{ if eq .Type "page" }}
+		{{ if .Site.Params.Avatar }}
+			<span class="avatar">
+				<a href="{{ .Site.BaseURL }}">
+					<img src="{{ .Site.Params.Avatar }}" alt="{{ .Site.Title }}" />
+				</a>
+			</span>
+		{{ end }}
 		<h1 class="site-title"><a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></h1>
 	{{ end }}
 
 
 	<div class="site-description">
 		{{- if isset .Site.Params "subtitle" -}}
-		<code>{{ .Site.Params.Subtitle | markdownify }}</code>
+
+			{{ if eq .Type "page" }}
+				<code>{{ .Site.Params.Subtitle | markdownify }}</code>
+			{{ else }}
+				<span class="is-single-post-page">☕ <a class="small-site-title"href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></span>
+			{{ end }}
+
 		{{- end -}}
 		<nav class="nav social">
 			<ul class="flat">
@@ -27,9 +30,7 @@
 				<span class="scheme-toggle"><a href="#" id="scheme-toggle"></a>
 				{{- end -}}
 			</ul>
-
 		</nav>
-
 	</div>
 
 	<nav class="nav">
