@@ -6,7 +6,7 @@ description: "Or how to implement Futures/Promises in Go without having to juggl
 tags: ["Golang"]
 ---
 
-Next time, before juggling tons of locks and waitgroups to prevent data races in Golang, you might consider simply opting for good old-fashioned channels. When used for mutual exclusion, channels too provide correctness all while. Moreover they are arguably more readable and harder to get wrong. If you aren't fully familiar with the concurrency guarantees provided by Go channels (beyond allowing for concurrent sends & receives) read on.
+Next time, before juggling tons of locks and waitgroups to prevent data races in Golang, you might consider simply opting for good old-fashioned channels. When used for mutual exclusion, channels too provide correctness. Moreover they are arguably more readable and harder to get wrong. If you aren't fully familiar with the concurrency guarantees provided by Go channels (beyond allowing for concurrent sends & receives) read on.
 
 
 
